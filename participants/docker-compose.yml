@@ -1,0 +1,63 @@
+---
+
+services:
+  uvicorn:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=4
+      - LOOP=uvloop
+      - JSON_LIBRARY=orjson
+    ports:
+      - "8000:8000"
+  uvicorn-one-worker:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=1
+      - LOOP=uvloop
+      - JSON_LIBRARY=orjson
+    ports:
+      - "8000:8000"
+  uvicorn-asyncio:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=4
+      - LOOP=asyncio
+      - JSON_LIBRARY=orjson
+    ports:
+      - "8000:8000"
+  uvicorn-stdjson:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=4
+      - LOOP=uvloop
+      - JSON_LIBRARY=stdlib
+    ports:
+      - "8000:8000"
+  uvicorn-stdlib:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=4
+      - LOOP=asyncio
+      - JSON_LIBRARY=stdlib
+    ports:
+      - "8000:8000"
+  uvicorn-stdlib-one-worker:
+    build:
+      context: python/uvicorn
+      dockerfile: python/uvicorn/Dockerfile
+    environment:
+      - WEB_CONCURRENCY=1
+      - LOOP=asyncio
+      - JSON_LIBRARY=stdlib
+    ports:
+      - "8000:8000"
