@@ -4,7 +4,6 @@ services:
   uvicorn:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=4
       - LOOP=uvloop
@@ -14,7 +13,6 @@ services:
   uvicorn-one-worker:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=1
       - LOOP=uvloop
@@ -24,7 +22,6 @@ services:
   uvicorn-asyncio:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=4
       - LOOP=asyncio
@@ -34,7 +31,6 @@ services:
   uvicorn-stdjson:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=4
       - LOOP=uvloop
@@ -44,7 +40,6 @@ services:
   uvicorn-stdlib:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=4
       - LOOP=asyncio
@@ -54,7 +49,6 @@ services:
   uvicorn-stdlib-one-worker:
     build:
       context: python/uvicorn
-      dockerfile: python/uvicorn/Dockerfile
     environment:
       - WEB_CONCURRENCY=1
       - LOOP=asyncio
