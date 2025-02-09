@@ -46,7 +46,7 @@ def main(args):
     for log in load_logs.values():
         server_stats.extend(parse_server_stats(log))
 
-    with open("results.json", "w") as f:
+    with open(args.output, "w") as f:
         f.write(json.dumps({
             "wrk_results": wrk_results,
             "server_stats": server_stats
@@ -219,5 +219,6 @@ def _parse_memory(text: str) -> float:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=str, help="Directory containing the results")
+    parser.add_argument("--output", type=str, default="results.json", help="Output file")
     args = parser.parse_args()
     main(args)
