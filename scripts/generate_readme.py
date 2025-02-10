@@ -1,10 +1,20 @@
 import argparse
+import shutil
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime
 import json
+from os import makedirs
 from statistics import mean, median
 import seaborn as sns
 import matplotlib.pyplot as plt
+from jinja2 import Environment, PackageLoader, select_autoescape
+
+
+jinja_env = Environment(
+    loader=PackageLoader("generate_readme", ".."),
+    autoescape=select_autoescape()
+)
 
 
 @dataclass
@@ -44,37 +54,69 @@ def main(args):
         results = json.load(f)
 
     by_test_name = parse_results(results)
-    generate_images(by_test_name)
+    images_by_test_name = generate_images(by_test_name)
+    generate_readme(by_test_name, images_by_test_name)
 
 
-def generate_images(benchmarks: dict[str, list[BenchmarkResults]]):
+def generate_images(benchmarks: dict[str, list[BenchmarkResults]]) -> dict[str, dict[str, str]]:
+    shutil.rmtree("results/images", ignore_errors=True)
+    makedirs("results/images")
+
+    images_by_test_name = defaultdict(dict)
     for test_name, benchmark_results in benchmarks.items():
         names = [result.name for result in benchmark_results]
         filename_template = f"results/images/{test_name}_{{}}.png"
 
         rps = [result.rps for result in benchmark_results]
-        create_chart(names, rps, "Requests per second", filename_template.format("rps"))
+        rps_image = filename_template.format("rps")
+        create_chart(names, rps, "Requests per second", rps_image)
+        images_by_test_name[test_name]["rps"] = rps_image
 
-        latency_avg = [result.latency_avg for result in benchmark_results]
-        create_chart(names, latency_avg, "Average latency", filename_template.format("latency_avg"))
+        latency_avg = [seconds_to_ms(result.latency_avg) for result in benchmark_results]
+        latency_avg_image = filename_template.format("latency_avg")
+        create_chart(names, latency_avg, "Average latency (ms)", latency_avg_image)
+        images_by_test_name[test_name]["latency_avg"] = latency_avg_image
 
-        latency_max = [result.latency_max for result in benchmark_results]
-        create_chart(names, latency_max, "Max latency", filename_template.format("latency_max"))
+        latency_max = [seconds_to_ms(result.latency_max) for result in benchmark_results]
+        latency_max_image = filename_template.format("latency_max")
+        create_chart(names, latency_max, "Max latency (ms)", latency_max_image)
+        images_by_test_name[test_name]["latency_max"] = latency_max_image
 
-        latency_90th = [result.latency_90th for result in benchmark_results]
-        create_chart(names, latency_90th, "90th percentile latency", filename_template.format("latency_90th"))
+        latency_90th = [seconds_to_ms(result.latency_90th) for result in benchmark_results]
+        latency_90th_image = filename_template.format("latency_90th")
+        create_chart(names, latency_90th, "90th percentile latency (ms)", latency_90th_image)
+        images_by_test_name[test_name]["latency_90th"] = latency_90th_image
 
-        cpu_avg_percent = [result.cpu_avg_percent for result in benchmark_results]
-        create_chart(names, cpu_avg_percent, "Average CPU usage", filename_template.format("cpu_avg_percent"))
+        cpu_avg_percent = [round(result.cpu_avg_percent) for result in benchmark_results]
+        cpu_avg_percent_image = filename_template.format("cpu_avg_percent")
+        create_chart(names, cpu_avg_percent, "Average CPU usage (%, 0-400)", cpu_avg_percent_image)
+        images_by_test_name[test_name]["cpu_avg_percent"] = cpu_avg_percent_image
 
-        cpu_median_percent = [result.cpu_median_percent for result in benchmark_results]
-        create_chart(names, cpu_median_percent, "Median CPU usage", filename_template.format("cpu_median_percent"))
+        cpu_median_percent = [round(result.cpu_median_percent) for result in benchmark_results]
+        cpu_median_percent_image = filename_template.format("cpu_median_percent")
+        create_chart(names, cpu_median_percent, "Median CPU usage (%, 0-400)", cpu_median_percent_image)
+        images_by_test_name[test_name]["cpu_median_percent"] = cpu_median_percent_image
 
         memory_median_mb = [result.memory_median_mb for result in benchmark_results]
-        create_chart(names, memory_median_mb, "Median memory usage", filename_template.format("memory_median_mb"))
+        memory_median_mb_image = filename_template.format("memory_median_mb")
+        create_chart(names, memory_median_mb, "Median memory usage (mb)", memory_median_mb_image)
+        images_by_test_name[test_name]["memory_median_mb"] = memory_median_mb_image
 
         memory_max_mb = [result.memory_max_mb for result in benchmark_results]
-        create_chart(names, memory_max_mb, "Max memory usage", filename_template.format("memory_max_mb"))
+        memory_max_mb_image = filename_template.format("memory_max_mb")
+        create_chart(names, memory_max_mb, "Max memory usage (mb)", memory_max_mb_image)
+        images_by_test_name[test_name]["memory_max_mb"] = memory_max_mb_image
+
+    return images_by_test_name
+
+
+def generate_readme(benchmarks: dict[str, list[BenchmarkResults]], images_by_test_name: dict[str, dict[str, str]]):
+    template = jinja_env.get_template("README.jinja2")
+    with open("README.md", "w") as f:
+        f.write(template.render(benchmarks=benchmarks, images=images_by_test_name))
+
+def seconds_to_ms(seconds: float) -> int:
+    return round(seconds * 1000)
 
 
 def create_chart(names: list[str], values: list[float], title: str, filename: str):
@@ -90,11 +132,11 @@ def create_chart(names: list[str], values: list[float], title: str, filename: st
 
     # Add value labels to each bar
     for i, v in enumerate(sorted_values):
-        barplot.text(v + 50, i, str(v), va='center')
+        barplot.text(v + 1, i, str(v), va='center')
 
     plt.title(title)
-    plt.tight_layout()
-    plt.savefig(filename, dpi=300)
+    # https://stackoverflow.com/questions/1271023/
+    plt.savefig(filename, dpi=300, bbox_inches="tight")
     # plt.show()
 
 
@@ -179,7 +221,7 @@ def _get_distribution(percent: int, distributions: list[dict[str, float]]) -> fl
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--results_file", required=True, type=str, help="File with benchmark results")
-    parser.add_argument("--template_file", required=True, type=str)
-    parser.add_argument("--output", required=True, type=str)
+    # parser.add_argument("--template_file", required=True, type=str)
+    # parser.add_argument("--output", required=True, type=str)
     args = parser.parse_args()
     main(args)

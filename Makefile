@@ -9,4 +9,4 @@ parse-results:  # parse results
 
 .PHONY: generate-report
 generate-readme:  # generate readme
-	.venv/bin/python
+	.venv/bin/python scripts/generate_readme.py --results_file=results/parsed.json

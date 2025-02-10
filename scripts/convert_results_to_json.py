@@ -191,8 +191,10 @@ def _parse_time_to_seconds(text: str) -> float:
         return float(text[:-2]) / 1_000_000
     elif text.endswith("s"):
         return float(text[:-1])
+    elif text.endswith("m"):
+        return float(text[:-1]) * 60
     else:
-        raise ValueError("Time format not recognized")
+        raise ValueError(f"Time format not recognized: {text}")
 
 
 def _parse_count(text: str) -> float:
