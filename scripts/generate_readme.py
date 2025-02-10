@@ -69,42 +69,42 @@ def generate_images(benchmarks: dict[str, list[BenchmarkResults]]) -> dict[str, 
 
         rps = [result.rps for result in benchmark_results]
         rps_image = filename_template.format("rps")
-        create_chart(names, rps, "Requests per second", rps_image)
+        create_chart(names, rps, "Requests per second", rps_image, x_label="RPS (higher is better)")
         images_by_test_name[test_name]["rps"] = rps_image
 
         latency_avg = [seconds_to_ms(result.latency_avg) for result in benchmark_results]
         latency_avg_image = filename_template.format("latency_avg")
-        create_chart(names, latency_avg, "Average latency (ms)", latency_avg_image)
+        create_chart(names, latency_avg, "Average latency", latency_avg_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_avg"] = latency_avg_image
 
         latency_max = [seconds_to_ms(result.latency_max) for result in benchmark_results]
         latency_max_image = filename_template.format("latency_max")
-        create_chart(names, latency_max, "Max latency (ms)", latency_max_image)
+        create_chart(names, latency_max, "Max latency", latency_max_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_max"] = latency_max_image
 
         latency_90th = [seconds_to_ms(result.latency_90th) for result in benchmark_results]
         latency_90th_image = filename_template.format("latency_90th")
-        create_chart(names, latency_90th, "90th percentile latency (ms)", latency_90th_image)
+        create_chart(names, latency_90th, "90th percentile latency", latency_90th_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_90th"] = latency_90th_image
 
         cpu_avg_percent = [round(result.cpu_avg_percent) for result in benchmark_results]
         cpu_avg_percent_image = filename_template.format("cpu_avg_percent")
-        create_chart(names, cpu_avg_percent, "Average CPU usage (%, 0-400)", cpu_avg_percent_image)
+        create_chart(names, cpu_avg_percent, "Average CPU usage (0-400%)", cpu_avg_percent_image, x_label="%")
         images_by_test_name[test_name]["cpu_avg_percent"] = cpu_avg_percent_image
 
         cpu_median_percent = [round(result.cpu_median_percent) for result in benchmark_results]
         cpu_median_percent_image = filename_template.format("cpu_median_percent")
-        create_chart(names, cpu_median_percent, "Median CPU usage (%, 0-400)", cpu_median_percent_image)
+        create_chart(names, cpu_median_percent, "Median CPU usage (0-400%)", cpu_median_percent_image, x_label="%")
         images_by_test_name[test_name]["cpu_median_percent"] = cpu_median_percent_image
 
         memory_median_mb = [result.memory_median_mb for result in benchmark_results]
         memory_median_mb_image = filename_template.format("memory_median_mb")
-        create_chart(names, memory_median_mb, "Median memory usage (mb)", memory_median_mb_image)
+        create_chart(names, memory_median_mb, "Median memory usage", memory_median_mb_image, x_label="mb, lower is better", reverse=False)
         images_by_test_name[test_name]["memory_median_mb"] = memory_median_mb_image
 
         memory_max_mb = [result.memory_max_mb for result in benchmark_results]
         memory_max_mb_image = filename_template.format("memory_max_mb")
-        create_chart(names, memory_max_mb, "Max memory usage (mb)", memory_max_mb_image)
+        create_chart(names, memory_max_mb, "Max memory usage", memory_max_mb_image, x_label="mb, lower is better", reverse=False)
         images_by_test_name[test_name]["memory_max_mb"] = memory_max_mb_image
 
     return images_by_test_name
@@ -119,9 +119,9 @@ def seconds_to_ms(seconds: float) -> int:
     return round(seconds * 1000)
 
 
-def create_chart(names: list[str], values: list[float], title: str, filename: str):
+def create_chart(names: list[str], values: list[float], title: str, filename: str, x_label: str | None = None, reverse: bool = True):
     items = list(zip(names, values))
-    items.sort(key=lambda x: x[1], reverse=True)
+    items.sort(key=lambda x: x[1], reverse=reverse)
     sorted_names, sorted_values = zip(*items)
 
     sns.set_style("darkgrid")
@@ -135,6 +135,8 @@ def create_chart(names: list[str], values: list[float], title: str, filename: st
         barplot.text(v + 1, i, str(v), va='center')
 
     plt.title(title)
+    if x_label:
+        plt.xlabel(x_label)
     # https://stackoverflow.com/questions/1271023/
     plt.savefig(filename, dpi=300, bbox_inches="tight")
     # plt.show()
