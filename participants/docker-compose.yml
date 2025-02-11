@@ -1,6 +1,11 @@
 ---
 
 services:
+  go-stdlib:
+    build:
+      context: go/stdlib
+    ports:
+      - "8000:8000"
   uvicorn:
     build:
       context: python/uvicorn
