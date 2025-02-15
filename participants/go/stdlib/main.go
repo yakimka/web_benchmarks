@@ -5,9 +5,16 @@ import (
 	"net/http"
 )
 
-func jsonHandler(w http.ResponseWriter, r *http.Request) {
+func apiHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	data := map[string]string{"message": "Hello, world!"}
+	queryValue := r.URL.Query().Get("query")
+	headerValue := r.Header.Get("X-Header")
+	data := map[string]string{
+		"message":    "Hello, world!",
+		"from_query": queryValue,
+		"from_header": headerValue,
+	}
+
 	json.NewEncoder(w).Encode(data)
 }
 
@@ -17,7 +24,7 @@ func plaintextHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/json", jsonHandler)
+	http.HandleFunc("/api", apiHandler)
 	http.HandleFunc("/plaintext", plaintextHandler)
 
 	http.ListenAndServe(":8000", nil)
