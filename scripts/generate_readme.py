@@ -26,36 +26,27 @@ class ServerStats:
 
 @dataclass
 class BenchmarkResults:
-    name: str
+    framework: str
     start_time: datetime
     end_time: datetime
-    latency_avg: float
-    latency_max: float
-    latency_stdev: float
-    latency_stdev_percent: float
-    latency_90th: float
-    latency_99th: float
-    rps_avg: float
-    rps_max: float
-    rps_stdev: float
-    rps_stdev_percent: float
-    num_requests: int
+    latency_mean_ms: int
+    latency_min_ms: int
+    latency_max_ms: int
+    latency_stdev_ms: int
+    latency_percentile_90_ms: int
+    latency_percentile_99_ms: int
     duration_sec: int
-    rps: int
-    errors: int
-    cpu_avg_percent: float
-    cpu_median_percent: float
+    requests_num: float
+    bytes_received: int
+    errors_num: int
+    cpu_avg_percent: int
+    cpu_median_percent: int
     memory_median_mb: float
     memory_max_mb: float
 
-
-def main(args):
-    with open(args.results_file) as f:
-        results = json.load(f)
-
-    by_test_name = parse_results(results)
-    images_by_test_name = generate_images(by_test_name)
-    generate_readme(by_test_name, images_by_test_name)
+    @property
+    def rps(self) -> int:
+        return int(self.requests_num / self.duration_sec)
 
 
 def generate_images(benchmarks: dict[str, list[BenchmarkResults]]) -> dict[str, dict[str, str]]:
@@ -64,7 +55,7 @@ def generate_images(benchmarks: dict[str, list[BenchmarkResults]]) -> dict[str, 
 
     images_by_test_name = defaultdict(dict)
     for test_name, benchmark_results in benchmarks.items():
-        names = [result.name for result in benchmark_results]
+        names = [result.framework for result in benchmark_results]
         filename_template = f"results/images/{test_name}_{{}}.png"
 
         rps = [result.rps for result in benchmark_results]
@@ -72,27 +63,32 @@ def generate_images(benchmarks: dict[str, list[BenchmarkResults]]) -> dict[str, 
         create_chart(names, rps, "Requests per second", rps_image, x_label="RPS (higher is better)")
         images_by_test_name[test_name]["rps"] = rps_image
 
-        latency_avg = [seconds_to_ms(result.latency_avg) for result in benchmark_results]
+        latency_avg = [result.latency_mean_ms for result in benchmark_results]
         latency_avg_image = filename_template.format("latency_avg")
         create_chart(names, latency_avg, "Average latency", latency_avg_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_avg"] = latency_avg_image
 
-        latency_max = [seconds_to_ms(result.latency_max) for result in benchmark_results]
+        latency_max = [result.latency_max_ms for result in benchmark_results]
         latency_max_image = filename_template.format("latency_max")
         create_chart(names, latency_max, "Max latency", latency_max_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_max"] = latency_max_image
 
-        latency_90th = [seconds_to_ms(result.latency_90th) for result in benchmark_results]
+        latency_90th = [result.latency_percentile_90_ms for result in benchmark_results]
         latency_90th_image = filename_template.format("latency_90th")
         create_chart(names, latency_90th, "90th percentile latency", latency_90th_image, x_label="ms, lower is better", reverse=False)
         images_by_test_name[test_name]["latency_90th"] = latency_90th_image
 
-        cpu_avg_percent = [round(result.cpu_avg_percent) for result in benchmark_results]
+        latency_99th = [result.latency_percentile_99_ms for result in benchmark_results]
+        latency_99th_image = filename_template.format("latency_99th")
+        create_chart(names, latency_99th, "99th percentile latency", latency_99th_image, x_label="ms, lower is better", reverse=False)
+        images_by_test_name[test_name]["latency_99th"] = latency_99th_image
+
+        cpu_avg_percent = [result.cpu_avg_percent for result in benchmark_results]
         cpu_avg_percent_image = filename_template.format("cpu_avg_percent")
         create_chart(names, cpu_avg_percent, "Average CPU usage (0-400%)", cpu_avg_percent_image, x_label="%")
         images_by_test_name[test_name]["cpu_avg_percent"] = cpu_avg_percent_image
 
-        cpu_median_percent = [round(result.cpu_median_percent) for result in benchmark_results]
+        cpu_median_percent = [result.cpu_median_percent for result in benchmark_results]
         cpu_median_percent_image = filename_template.format("cpu_median_percent")
         create_chart(names, cpu_median_percent, "Median CPU usage (0-400%)", cpu_median_percent_image, x_label="%")
         images_by_test_name[test_name]["cpu_median_percent"] = cpu_median_percent_image
@@ -115,8 +111,13 @@ def generate_readme(benchmarks: dict[str, list[BenchmarkResults]], images_by_tes
     with open("README.md", "w") as f:
         f.write(template.render(benchmarks=benchmarks, images=images_by_test_name))
 
-def seconds_to_ms(seconds: float) -> int:
-    return round(seconds * 1000)
+
+def microsecond_to_milliseconds(microseconds: float) -> int:
+    return round(microseconds / 1000)
+
+
+def microsecond_to_seconds(microseconds: float) -> int:
+    return round(microseconds / 1_000_000)
 
 
 def create_chart(names: list[str], values: list[float], title: str, filename: str, x_label: str | None = None, reverse: bool = True):
@@ -153,40 +154,38 @@ def parse_results(results: dict) -> dict[str, dict[str, BenchmarkResults]]:
     ]
 
     by_test_name = {}
-    for framework_name, framework_results in results["wrk_results"].items():
-        for test_name, test in framework_results.items():
-            test_results = test["results"]
-            start_time = _parse_datetime(test["test_start_time"])
-            end_time = _parse_datetime(test["test_end_time"])
-            calculated_stats = _calculate_server_stats(server_stats, start_time, end_time)
+    for wrk_result in results["wrk_results"]:
+        framework = wrk_result["framework"]
+        test_name = wrk_result["path"]
+        start_time = _parse_datetime(wrk_result["start_time"])
+        end_time = _parse_datetime(wrk_result["end_time"])
+        calculated_stats = _calculate_server_stats(server_stats, start_time, end_time)
 
-            by_test_name.setdefault(test_name, []).append(
-                BenchmarkResults(
-                    name=framework_name,
-                    start_time=start_time,
-                    end_time=end_time,
-                    latency_avg=test_results["latency_avg"],
-                    latency_max=test_results["latency_max"],
-                    latency_stdev=test_results["latency_stdev"],
-                    latency_stdev_percent=test_results["latency_stdev_percent"],
-                    latency_90th=_get_distribution(90, test_results["latency_distributions"]),
-                    latency_99th=_get_distribution(99, test_results["latency_distributions"]),
-                    rps_avg=test_results["rps_avg"],
-                    rps_max=test_results["rps_max"],
-                    rps_stdev=test_results["rps_stdev"],
-                    rps_stdev_percent=test_results["rps_stdev_percent"],
-                    num_requests=test_results["num_requests"],
-                    duration_sec=test_results["duration"],
-                    rps=test_results["rps"],
-                    errors=(
-                        test_results["connect_errors"]
-                        + test_results["read_errors"]
-                        + test_results["write_errors"]
-                        + test_results["timeout_errors"]
-                    ),
-                    **calculated_stats,
-                )
+        by_test_name.setdefault(test_name, []).append(
+            BenchmarkResults(
+                framework=framework,
+                start_time=start_time,
+                end_time=end_time,
+                latency_mean_ms=microsecond_to_milliseconds(wrk_result["latency_mean"]),
+                latency_min_ms=microsecond_to_milliseconds(wrk_result["latency_min"]),
+                latency_max_ms=microsecond_to_milliseconds(wrk_result["latency_max"]),
+                latency_stdev_ms=microsecond_to_milliseconds(wrk_result["latency_stdev"]),
+                latency_percentile_90_ms=microsecond_to_milliseconds(wrk_result["latency_percentile_90"]),
+                latency_percentile_99_ms=microsecond_to_milliseconds(wrk_result["latency_percentile_99"]),
+                duration_sec=microsecond_to_seconds(wrk_result["duration"]),
+                requests_num=wrk_result["requests_num"],
+                bytes_received=round(wrk_result["bytes_received"]),
+                errors_num=int(
+                        wrk_result["errors_status"]
+                        + wrk_result["errors_connect"]
+                        + wrk_result["errors_read"]
+                        + wrk_result["errors_write"]
+                        + wrk_result["errors_timeout"]
+                ),
+                **calculated_stats,
             )
+        )
+
     return by_test_name
 
 
@@ -198,10 +197,11 @@ def _calculate_server_stats(server_stats: list[ServerStats], time_start: datetim
             cpu_data.append(item.cpu_percent)
             memory_data.append(item.memory_usage_mb)
 
-
+    cpu_data = [1]
+    memory_data = [1]
     return {
-        "cpu_avg_percent": mean(cpu_data),
-        "cpu_median_percent": median(cpu_data),
+        "cpu_avg_percent": round(mean(cpu_data)),
+        "cpu_median_percent": round(median(cpu_data)),
         "memory_median_mb": median(memory_data),
         "memory_max_mb": max(memory_data),
     }
@@ -212,12 +212,13 @@ def _parse_datetime(s: str) -> datetime:
     return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
 
 
-def _get_distribution(percent: int, distributions: list[dict[str, float]]) -> float:
-    for distribution in distributions:
-        if distribution["percentage"] == percent:
-            return distribution["latency"]
-    raise ValueError(f"Percent {percent} not found in distributions")
+def main(args):
+    with open(args.results_file) as f:
+        results = json.load(f)
 
+    by_test_name = parse_results(results)
+    images_by_test_name = generate_images(by_test_name)
+    generate_readme(by_test_name, images_by_test_name)
 
 
 if __name__ == '__main__':

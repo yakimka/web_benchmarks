@@ -4,9 +4,10 @@ venv:  # make venv and install requirements
 	.venv/bin/python -m pip install jinja2==3.1.5 seaborn==0.13.2
 
 .PHONY: parse-results
-parse-results:  # parse results
+parse-results: scripts/convert_results_to_json.py results/*.txt results/*.log    # parse results
 	.venv/bin/python scripts/convert_results_to_json.py results --output=results/parsed.json
 
-.PHONY: generate-report
-generate-readme:  # generate readme
+.PHONY: readme
+readme: scripts/generate_readme.py README.jinja2 results/parsed.json  # generate readme
+	make parse-results
 	.venv/bin/python scripts/generate_readme.py --results_file=results/parsed.json
