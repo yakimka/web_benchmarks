@@ -4,7 +4,7 @@ INTERVAL=2
 
 while true
 do
-  TIMESTAMP=$(date +"%Y-%m-%dT%H:%M:%S")
+  TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%S")
 
   docker compose stats --no-stream --format \
   "{{.CPUPerc}},{{.MemUsage}},{{.MemPerc}}" \

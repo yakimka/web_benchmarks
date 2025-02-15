@@ -12,22 +12,22 @@ duration="${3:-600}"
 threads="${4:-8}"
 connections="${5:-180}"
 
-echo "Warming up for 10 seconds"
-wrk -t 4 -c 40 -d 10 $host/plaintext > /dev/null 2>&1
+export NAME=$name
+mkdir -p ./results
+
 
 echo "Running load testing for $name"
-mkdir -p ./results
-echo "Starting tests for $name $(date +"%Y-%m-%dT%H:%M:%S")" > ./results/$name.txt
 
 echo "Plaintext endpoint"
-echo "Start plaintext $(date +"%Y-%m-%dT%H:%M:%S")" >> ./results/$name.txt
-wrk -t $threads -c $connections -d $duration --latency $host/plaintext >> ./results/$name.txt
-echo "End test $(date +"%Y-%m-%dT%H:%M:%S")" >> ./results/$name.txt
+echo "Warming up for 10 seconds"
+wrk -t 4 -c 40 -d 10 $host/plaintext > /dev/null 2>&1
+echo "Running for $duration seconds"
+wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/plaintext
 
-echo "JSON endpoint"
-echo "Start json $(date +"%Y-%m-%dT%H:%M:%S")" >> ./results/$name.txt
-wrk -t $threads -c $connections -d $duration --latency $host/json >> ./results/$name.txt
-echo "End test $(date +"%Y-%m-%dT%H:%M:%S")" >> ./results/$name.txt
+echo "API endpoint"
+echo "Warming up for 10 seconds"
+wrk -t 4 -c 40 -d 10 $host/api > /dev/null 2>&1
+echo "Running for $duration seconds"
+wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/api
 
-echo "End $name $(date +"%Y-%m-%dT%H:%M:%S")" >> ./results/$name.txt
-echo "Results saved to ./results/$name.txt"
+echo "All done!"
