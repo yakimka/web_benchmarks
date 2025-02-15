@@ -1,5 +1,6 @@
 click==8.1.7
 h11==0.14.0
-orjson==3.10.12
-uvicorn==0.32.1
+orjson==3.10.15
+uvicorn==0.34.0
 uvloop==0.21.0
+httptools==0.6.4

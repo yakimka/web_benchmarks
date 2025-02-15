@@ -207,7 +207,6 @@ def _calculate_server_stats(server_stats: list[ServerStats], time_start: datetim
     }
 
 
-
 def _parse_datetime(s: str) -> datetime:
     return datetime.strptime(s, "%Y-%m-%dT%H:%M:%S")
 
