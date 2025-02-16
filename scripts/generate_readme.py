@@ -29,12 +29,12 @@ class BenchmarkResults:
     framework: str
     start_time: datetime
     end_time: datetime
-    latency_mean_ms: int
-    latency_min_ms: int
-    latency_max_ms: int
-    latency_stdev_ms: int
-    latency_percentile_90_ms: int
-    latency_percentile_99_ms: int
+    latency_mean_ms: float
+    latency_min_ms: float
+    latency_max_ms: float
+    latency_stdev_ms: float
+    latency_percentile_90_ms: float
+    latency_percentile_99_ms: float
     duration_sec: int
     requests_num: float
     bytes_received: int
@@ -112,8 +112,8 @@ def generate_readme(benchmarks: dict[str, list[BenchmarkResults]], images_by_tes
         f.write(template.render(benchmarks=benchmarks, images=images_by_test_name))
 
 
-def microsecond_to_milliseconds(microseconds: float) -> int:
-    return round(microseconds / 1000)
+def microsecond_to_milliseconds(microseconds: float) -> float:
+    return round(microseconds / 1000, 2)
 
 
 def microsecond_to_seconds(microseconds: float) -> int:
@@ -197,8 +197,6 @@ def _calculate_server_stats(server_stats: list[ServerStats], time_start: datetim
             cpu_data.append(item.cpu_percent)
             memory_data.append(item.memory_usage_mb)
 
-    cpu_data = [1]
-    memory_data = [1]
     return {
         "cpu_avg_percent": round(mean(cpu_data)),
         "cpu_median_percent": round(median(cpu_data)),

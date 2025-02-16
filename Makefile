@@ -8,6 +8,5 @@ parse-results: scripts/convert_results_to_json.py results/*.txt results/*.log   
 	.venv/bin/python scripts/convert_results_to_json.py results --output=results/parsed.json
 
 .PHONY: readme
-readme: scripts/generate_readme.py README.jinja2 results/parsed.json  # generate readme
-	make parse-results
+readme: scripts/generate_readme.py README.jinja2 parse-results  # generate readme
 	.venv/bin/python scripts/generate_readme.py --results_file=results/parsed.json
