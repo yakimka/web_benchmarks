@@ -12,3 +12,7 @@ services:
     volumes:
     - ./initdb:/docker-entrypoint-initdb.d
     - ./data:/var/lib/postgresql/data
+
+networks:
+  default:
+    name: webbench

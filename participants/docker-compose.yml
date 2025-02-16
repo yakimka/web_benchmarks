@@ -66,3 +66,7 @@ services:
       - JSON_LIBRARY=stdlib
     ports:
       - "8000:8000"
+
+networks:
+  default:
+    name: webbench

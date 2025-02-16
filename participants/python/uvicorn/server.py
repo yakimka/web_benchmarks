@@ -1,5 +1,8 @@
 import os
+from dataclasses import asdict, dataclass
+from datetime import date, datetime
 
+import asyncpg
 import orjson
 import json
 from urllib.parse import parse_qs
@@ -29,6 +32,11 @@ PLAINTEXT_RESPONSE = {
         [b"content-type", b"text/plain; charset=utf-8"],
     ]
 }
+
+POSTGRES_USER = os.environ.get("POSTGRES_USER", "postgres")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "postgres")
+POSTGRES_DB = os.environ.get("POSTGRES_DB", "postgres")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "192.168.98.1")
 
 
 async def api(scope, receive, send):
@@ -69,6 +77,78 @@ async def plaintext(scope, receive, send):
     })
 
 
+conn = None
+
+async def get_db_conn():
+    global conn
+    if conn is None:
+        conn = await asyncpg.connect(
+            user=POSTGRES_USER,
+            password=POSTGRES_PASSWORD,
+            database=POSTGRES_PASSWORD,
+            host=POSTGRES_HOST,
+        )
+    return conn
+
+
+@dataclass
+class User:
+    id: int
+    username: str
+    email: str
+    password_hash: str
+    created_at: datetime
+    is_active: bool
+
+
+@dataclass
+class Device:
+    id: int
+    user_id: int
+    device_name: str
+    device_type: str | None
+    serial_number: str
+    ip_address: str | None
+    mac_address: str | None
+    status: str
+    last_online: datetime | None
+    purchase_date: date | None
+    warranty_expiry: datetime | None
+    location: str | None
+    firmware_version: str | None
+    created_at: datetime
+
+
+async def db(scope, receive, send):
+    """
+    Test type 3: Database
+    """
+    conn = await get_db_conn()
+
+    user_fields = await conn.fetch(
+        'SELECT * FROM users WHERE id = $1',
+        1,
+    )
+    user = User(**user_fields[0])
+
+    devices_fields = await conn.fetch(
+        'SELECT * FROM devices LIMIT 10',
+    )
+    devices = [Device(**fields) for fields in devices_fields]
+    content = json_dumps([
+        asdict(device)
+        for device in devices
+    ], default=str)
+    await send(JSON_RESPONSE)
+    await send(
+        {
+            "type": "http.response.body",
+            "body": content,
+            "more_body": False
+        }
+    )
+
+
 async def handle_404(scope, receive, send):
     content = b"Not found"
     await send(PLAINTEXT_RESPONSE)
@@ -82,6 +162,7 @@ async def handle_404(scope, receive, send):
 routes = {
     "/api": api,
     "/plaintext": plaintext,
+    "/db": db,
 }
 
 
