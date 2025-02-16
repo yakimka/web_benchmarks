@@ -40,13 +40,40 @@ not representative of real world usage, just a simple overhead comparison.
 {% with test_images=images["plaintext"] %}
 ![{{ test_images.rps }}]({{ test_images.rps }})
 ![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
+
+<details>
+    <summary>CPU median</summary>
+
 ![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
+</details>
+
 ![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
+
+<details>
+    <summary>Memory max</summary>
+
 ![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
+</details>
+
 ![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
+
+<details>
+    <summary>Latency max</summary>
+
 ![{{ test_images.latency_max }}]({{ test_images.latency_max }})
+</details>
+
+<details>
+    <summary>Latency 90th</summary>
+
 ![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
+</details>
+
+<details>
+    <summary>Latency 99th</summary>
+
 ![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
+</details>
 {% endwith %}
 
 ### API
@@ -58,11 +85,38 @@ framework validation and json serialization.
 {% with test_images=images["api"] %}
 ![{{ test_images.rps }}]({{ test_images.rps }})
 ![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
+
+<details>
+    <summary>CPU median</summary>
+
 ![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
+</details>
+
 ![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
+
+<details>
+    <summary>Memory max</summary>
+
 ![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
+</details>
+
 ![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
+
+<details>
+    <summary>Latency max</summary>
+
 ![{{ test_images.latency_max }}]({{ test_images.latency_max }})
+</details>
+
+<details>
+    <summary>Latency 90th</summary>
+
 ![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
+</details>
+
+<details>
+    <summary>Latency 99th</summary>
+
 ![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
+</details>
 {% endwith %}

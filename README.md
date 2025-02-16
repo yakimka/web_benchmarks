@@ -40,13 +40,40 @@ not representative of real world usage, just a simple overhead comparison.
 
 ![results/images/plaintext_rps.png](results/images/plaintext_rps.png)
 ![results/images/plaintext_cpu_avg_percent.png](results/images/plaintext_cpu_avg_percent.png)
+
+<details>
+    <summary>CPU median</summary>
+
 ![results/images/plaintext_cpu_median_percent.png](results/images/plaintext_cpu_median_percent.png)
+</details>
+
 ![results/images/plaintext_memory_median_mb.png](results/images/plaintext_memory_median_mb.png)
+
+<details>
+    <summary>Memory max</summary>
+
 ![results/images/plaintext_memory_max_mb.png](results/images/plaintext_memory_max_mb.png)
+</details>
+
 ![results/images/plaintext_latency_avg.png](results/images/plaintext_latency_avg.png)
+
+<details>
+    <summary>Latency max</summary>
+
 ![results/images/plaintext_latency_max.png](results/images/plaintext_latency_max.png)
+</details>
+
+<details>
+    <summary>Latency 90th</summary>
+
 ![results/images/plaintext_latency_90th.png](results/images/plaintext_latency_90th.png)
+</details>
+
+<details>
+    <summary>Latency 99th</summary>
+
 ![results/images/plaintext_latency_99th.png](results/images/plaintext_latency_99th.png)
+</details>
 
 
 ### API
@@ -58,10 +85,37 @@ framework validation and json serialization.
 
 ![results/images/api_rps.png](results/images/api_rps.png)
 ![results/images/api_cpu_avg_percent.png](results/images/api_cpu_avg_percent.png)
+
+<details>
+    <summary>CPU median</summary>
+
 ![results/images/api_cpu_median_percent.png](results/images/api_cpu_median_percent.png)
+</details>
+
 ![results/images/api_memory_median_mb.png](results/images/api_memory_median_mb.png)
+
+<details>
+    <summary>Memory max</summary>
+
 ![results/images/api_memory_max_mb.png](results/images/api_memory_max_mb.png)
+</details>
+
 ![results/images/api_latency_avg.png](results/images/api_latency_avg.png)
+
+<details>
+    <summary>Latency max</summary>
+
 ![results/images/api_latency_max.png](results/images/api_latency_max.png)
+</details>
+
+<details>
+    <summary>Latency 90th</summary>
+
 ![results/images/api_latency_90th.png](results/images/api_latency_90th.png)
+</details>
+
+<details>
+    <summary>Latency 99th</summary>
+
 ![results/images/api_latency_99th.png](results/images/api_latency_99th.png)
+</details>
