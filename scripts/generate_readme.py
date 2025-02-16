@@ -126,14 +126,11 @@ def create_chart(names: list[str], values: list[float], title: str, filename: st
     sorted_names, sorted_values = zip(*items)
 
     sns.set_style("darkgrid")
-    # sns.set_context("paper")
 
     plt.figure(figsize=(6, 6))
-    barplot = sns.barplot(x=sorted_values, y=sorted_names, orient='h')
-
-    # Add value labels to each bar
-    for i, v in enumerate(sorted_values):
-        barplot.text(v + 1, i, str(v), va='center')
+    barplot = sns.barplot(x=sorted_values, y=sorted_names, orient="h")
+    barplot.bar_label(barplot.containers[0], padding=1)
+    # barplot.set_xlim(auto=True)
 
     plt.title(title)
     if x_label:
@@ -200,8 +197,8 @@ def _calculate_server_stats(server_stats: list[ServerStats], time_start: datetim
     return {
         "cpu_avg_percent": round(mean(cpu_data)),
         "cpu_median_percent": round(median(cpu_data)),
-        "memory_median_mb": median(memory_data),
-        "memory_max_mb": max(memory_data),
+        "memory_median_mb": round(median(memory_data), 2),
+        "memory_max_mb": round(max(memory_data), 2),
     }
 
 
@@ -218,7 +215,7 @@ def main(args):
     generate_readme(by_test_name, images_by_test_name)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--results_file", required=True, type=str, help="File with benchmark results")
     # parser.add_argument("--template_file", required=True, type=str)
