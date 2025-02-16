@@ -77,18 +77,19 @@ async def plaintext(scope, receive, send):
     })
 
 
-conn = None
+pool = None
 
-async def get_db_conn():
-    global conn
-    if conn is None:
-        conn = await asyncpg.connect(
+
+async def setup_pool():
+    global pool
+    if pool is None:
+        pool = await asyncpg.create_pool(
             user=POSTGRES_USER,
             password=POSTGRES_PASSWORD,
             database=POSTGRES_PASSWORD,
             host=POSTGRES_HOST,
         )
-    return conn
+    return pool
 
 
 @dataclass
@@ -123,17 +124,16 @@ async def db(scope, receive, send):
     """
     Test type 3: Database
     """
-    conn = await get_db_conn()
+    async with pool.acquire() as conn:
+        user_fields = await conn.fetch(
+            'SELECT * FROM users WHERE id = $1',
+            1,
+        )
+        devices_fields = await conn.fetch(
+            'SELECT * FROM devices LIMIT 10',
+        )
 
-    user_fields = await conn.fetch(
-        'SELECT * FROM users WHERE id = $1',
-        1,
-    )
     user = User(**user_fields[0])
-
-    devices_fields = await conn.fetch(
-        'SELECT * FROM devices LIMIT 10',
-    )
     devices = [Device(**fields) for fields in devices_fields]
     content = json_dumps([
         asdict(device)
@@ -167,6 +167,13 @@ routes = {
 
 
 async def main(scope, receive, send):
+    if scope["type"] == "lifespan":
+        message = await receive()
+        if message["type"] == "lifespan.startup":
+            await setup_pool()
+            await send({"type": "lifespan.startup.complete"})
+        return
+
     path = scope["path"]
     handler = routes.get(path, handle_404)
     await handler(scope, receive, send)
