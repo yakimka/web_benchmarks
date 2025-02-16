@@ -16,6 +16,16 @@ services:
       - JSON_LIBRARY=orjson
     ports:
       - "8000:8000"
+  uvicorn-h11:
+    build:
+      context: python/uvicorn
+    environment:
+      - WEB_CONCURRENCY=4
+      - LOOP=uvloop
+      - HTTP=h11
+      - JSON_LIBRARY=orjson
+    ports:
+      - "8000:8000"
   uvicorn-one-worker:
     build:
       context: python/uvicorn
