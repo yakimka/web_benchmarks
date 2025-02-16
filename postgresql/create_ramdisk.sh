@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set RAM disk size in MB
-SIZE_MB=256
+SIZE_MB=128
 
 # Define the mount point
 data_dir="$(pwd)/data"
