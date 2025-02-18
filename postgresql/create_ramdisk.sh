@@ -16,4 +16,4 @@ sudo umount "$data_dir" 2>/dev/null
 sudo mount -t tmpfs -o size=${SIZE_MB}M tmpfs "$data_dir"
 
 echo "RAM disk of ${SIZE_MB}MB mounted at $data_dir"
-echo "You can test the RAM disk speed by running: sudo dd if=/dev/zero of=$data_dir/test bs=4k count=10000 && rm $data_dir/test"
+echo "You can test the RAM disk speed by running: dd if=/dev/zero of=$data_dir/test bs=4k count=10000 && rm $data_dir/test"
