@@ -13,7 +13,7 @@ CREATE TABLE devices (
     device_name VARCHAR(100) NOT NULL,
     device_type VARCHAR(50),
     serial_number VARCHAR(100) UNIQUE NOT NULL,
-    ip_address INET,
+    ip_address VARCHAR(15),
     mac_address VARCHAR(17),
     status VARCHAR(20) CHECK (status IN ('active', 'inactive', 'repair', 'decommissioned')) DEFAULT 'active',
     last_online TIMESTAMP,

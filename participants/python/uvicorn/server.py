@@ -33,10 +33,7 @@ PLAINTEXT_RESPONSE = {
     ]
 }
 
-POSTGRES_USER = os.environ.get("POSTGRES_USER", "postgres")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD", "postgres")
-POSTGRES_DB = os.environ.get("POSTGRES_DB", "postgres")
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST", "192.168.98.1")
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 
 async def api(scope, receive, send):
@@ -83,12 +80,7 @@ pool = None
 async def setup_pool():
     global pool
     if pool is None:
-        pool = await asyncpg.create_pool(
-            user=POSTGRES_USER,
-            password=POSTGRES_PASSWORD,
-            database=POSTGRES_PASSWORD,
-            host=POSTGRES_HOST,
-        )
+        pool = await asyncpg.create_pool(dsn=DATABASE_URL)
     return pool
 
 
