@@ -2,18 +2,64 @@ import os
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
 
-import asyncpg
-import orjson
-import json
 from urllib.parse import parse_qs
+
+DATABASE_URL = os.environ["DATABASE_URL"]
+
+if os.environ.get("PYPY_VERSION"):
+    from psycopg.rows import dict_row
+    from psycopg_pool import AsyncConnectionPool
+
+    pool = AsyncConnectionPool(DATABASE_URL, open=False)
+
+
+    async def init_db():
+        await pool.open()
+
+
+    async def fetch_data():
+        async with pool.connection() as conn:
+            conn.row_factory = dict_row
+
+            async with conn.cursor() as cur:
+                await cur.execute('SELECT * FROM users WHERE id = %s', (1,))
+                users = await cur.fetchall()
+
+                await cur.execute('SELECT * FROM devices LIMIT 10')
+                devices = await cur.fetchall()
+        return users, devices
+
+else:
+    import asyncpg
+
+    pool = None
+
+
+    async def init_db():
+        global pool
+        if pool is None:
+            pool = await asyncpg.create_pool(dsn=DATABASE_URL)
+        return pool
+
+
+    async def fetch_data():
+        async with pool.acquire() as conn:
+            users = await conn.fetch('SELECT * FROM users WHERE id = $1', 1)
+            devices = await conn.fetch('SELECT * FROM devices LIMIT 10')
+        return users, devices
 
 
 JSON_LIBRARY = os.environ.get("JSON_LIBRARY", "orjson")
 if JSON_LIBRARY == "orjson":
+    import orjson
+
     json_dumps = orjson.dumps
 elif JSON_LIBRARY == "stdlib":
-    def json_dumps(data):
-        return json.dumps(data).encode("utf-8")
+    import json
+
+
+    def json_dumps(data, **kwargs):
+        return json.dumps(data, **kwargs).encode("utf-8")
 else:
     raise ValueError(f"Unknown JSON_LIBRARY: {JSON_LIBRARY}")
 
@@ -33,8 +79,6 @@ PLAINTEXT_RESPONSE = {
     ]
 }
 
-DATABASE_URL = os.environ["DATABASE_URL"]
-
 
 async def api(scope, receive, send):
     """
@@ -48,17 +92,21 @@ async def api(scope, receive, send):
         if header[0] == b"x-header":
             from_header = header[1].decode("utf-8")
             break
-    content = json_dumps({
-        "message": "Hello, world!",
-        "from_query": parsed_qs.get(b"query", [b""])[0].decode("utf-8"),
-        "from_header": from_header,
-    })
+    content = json_dumps(
+        {
+            "message": "Hello, world!",
+            "from_query": parsed_qs.get(b"query", [b""])[0].decode("utf-8"),
+            "from_header": from_header,
+        }
+    )
     await send(JSON_RESPONSE)
-    await send({
-        "type": "http.response.body",
-        "body": content,
-        "more_body": False
-    })
+    await send(
+        {
+            "type": "http.response.body",
+            "body": content,
+            "more_body": False
+        }
+    )
 
 
 async def plaintext(scope, receive, send):
@@ -67,21 +115,13 @@ async def plaintext(scope, receive, send):
     """
     content = b"Hello, world!"
     await send(PLAINTEXT_RESPONSE)
-    await send({
-        "type": "http.response.body",
-        "body": content,
-        "more_body": False
-    })
-
-
-pool = None
-
-
-async def setup_pool():
-    global pool
-    if pool is None:
-        pool = await asyncpg.create_pool(dsn=DATABASE_URL)
-    return pool
+    await send(
+        {
+            "type": "http.response.body",
+            "body": content,
+            "more_body": False
+        }
+    )
 
 
 @dataclass
@@ -116,21 +156,11 @@ async def db(scope, receive, send):
     """
     Test type 3: Database
     """
-    async with pool.acquire() as conn:
-        user_fields = await conn.fetch(
-            'SELECT * FROM users WHERE id = $1',
-            1,
-        )
-        devices_fields = await conn.fetch(
-            'SELECT * FROM devices LIMIT 10',
-        )
+    users_data, devices_data = await fetch_data()
 
-    user = User(**user_fields[0])
-    devices = [Device(**fields) for fields in devices_fields]
-    content = json_dumps([
-        asdict(device)
-        for device in devices
-    ], default=str)
+    user = User(**users_data[0])
+    devices = [Device(**fields) for fields in devices_data]
+    content = json_dumps([asdict(device) for device in devices], default=str)
     await send(JSON_RESPONSE)
     await send(
         {
@@ -144,11 +174,13 @@ async def db(scope, receive, send):
 async def handle_404(scope, receive, send):
     content = b"Not found"
     await send(PLAINTEXT_RESPONSE)
-    await send({
-        "type": "http.response.body",
-        "body": content,
-        "more_body": False
-    })
+    await send(
+        {
+            "type": "http.response.body",
+            "body": content,
+            "more_body": False
+        }
+    )
 
 
 routes = {
@@ -162,7 +194,7 @@ async def main(scope, receive, send):
     if scope["type"] == "lifespan":
         message = await receive()
         if message["type"] == "lifespan.startup":
-            await setup_pool()
+            await init_db()
             await send({"type": "lifespan.startup.complete"})
         return
 

@@ -74,6 +74,15 @@ services:
       - JSON_LIBRARY=stdlib
     ports:
       - "8000:8000"
+  uvicorn-pypy:
+    build:
+      context: python/uvicorn
+      dockerfile: Dockerfile.pypy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
+    ports:
+      - "8000:8000"
 
 networks:
   default:
