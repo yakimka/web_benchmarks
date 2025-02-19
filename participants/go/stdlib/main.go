@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,51 +64,38 @@ func initPool() error {
 		return err
 	}
 
-	pool, err = pgxpool.ConnectConfig(context.Background(), config)
+	pool, err = pgxpool.NewWithConfig(context.Background(), config)
 	return err
 }
 
 func dbHandler(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-
 	// Fetch user data
-	userRows, err := pool.Query(ctx, "SELECT * FROM users WHERE id = $1", 1)
+	user := User{}
+	err := pool.QueryRow(context.Background(), "SELECT * FROM users WHERE id = $1", 1).Scan(
+		&user.ID,
+		&user.Username,
+		&user.Email,
+		&user.PasswordHash,
+		&user.CreatedAt,
+		&user.IsActive,
+	)
 	if err != nil {
 		http.Error(w, "Database error", http.StatusInternalServerError)
 		log.Printf("Error querying user: %v", err)
 		return
 	}
-	defer userRows.Close()
 
-	var user User
-	if userRows.Next() {
-		err = userRows.Scan(
-			&user.ID,
-			&user.Username,
-			&user.Email,
-			&user.PasswordHash,
-			&user.CreatedAt,
-			&user.IsActive,
-		)
-		if err != nil {
-			http.Error(w, "Error scanning user data", http.StatusInternalServerError)
-			log.Printf("Error scanning user: %v", err)
-			return
-		}
-	}
-
-	deviceRows, err := pool.Query(ctx, "SELECT * FROM devices LIMIT 10")
+	rows, err := pool.Query(context.Background(), "SELECT * FROM devices LIMIT 10")
 	if err != nil {
-		http.Error(w, "Database error", http.StatusInternalServerError)
-		log.Printf("Error querying devices: %v", err)
+		http.Error(w, "Error retrieving devices", http.StatusInternalServerError)
 		return
 	}
-	defer deviceRows.Close()
+	defer rows.Close()
 
-	var devices []Device
-	for deviceRows.Next() {
+	devices := []Device{}
+	for rows.Next() {
 		var device Device
-		err = deviceRows.Scan(
+		err = rows.Scan(
 			&device.ID,
 			&device.UserID,
 			&device.DeviceName,

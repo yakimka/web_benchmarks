@@ -1,5 +1,4 @@
 ARG PYTHON_IMAGE=python:3.12.7-slim
-# pypy:3.10-7.3.17-slim
 FROM $PYTHON_IMAGE
 
 COPY requirements.base.txt /app/requirements.base.txt
