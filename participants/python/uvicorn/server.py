@@ -38,7 +38,11 @@ else:
     async def init_db():
         global pool
         if pool is None:
-            pool = await asyncpg.create_pool(dsn=DATABASE_URL)
+            pool = await asyncpg.create_pool(
+                dsn=DATABASE_URL,
+                min_size=8,
+                max_size=8,
+            )
         return pool
 
 

@@ -63,6 +63,7 @@ func initPool() error {
 	if err != nil {
 		return err
 	}
+	config.MaxConns = 10
 
 	pool, err = pgxpool.NewWithConfig(context.Background(), config)
 	return err
