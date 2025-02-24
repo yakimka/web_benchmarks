@@ -1,6 +1,6 @@
 start_time: 2025-02-23T17:35:15
 path: /plaintext
-framework: uvicroen-h11
+framework: uvicorn-h11
 latency_min: 742
 latency_max: 117042
 latency_mean: 4360.934921114
@@ -19,7 +19,7 @@ end_time: 2025-02-23T17:45:15
 
 start_time: 2025-02-23T17:45:25
 path: /api?query=somequerystringfromclient
-framework: uvicroen-h11
+framework: uvicorn-h11
 latency_min: 715
 latency_max: 117987
 latency_mean: 4755.6070446169
@@ -38,7 +38,7 @@ end_time: 2025-02-23T17:55:25
 
 start_time: 2025-02-23T17:55:36
 path: /db
-framework: uvicroen-h11
+framework: uvicorn-h11
 latency_min: 2894
 latency_max: 430891
 latency_mean: 18632.889995456

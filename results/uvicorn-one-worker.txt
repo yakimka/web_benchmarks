@@ -1,6 +1,6 @@
 start_time: 2025-02-23T19:17:45
 path: /plaintext
-framework: uvicorn
+framework: uvicorn-one-worker
 latency_min: 769
 latency_max: 113834
 latency_mean: 3658.9155481139
@@ -19,7 +19,7 @@ end_time: 2025-02-23T19:27:45
 
 start_time: 2025-02-23T19:27:55
 path: /api?query=somequerystringfromclient
-framework: uvicorn
+framework: uvicorn-one-worker
 latency_min: 697
 latency_max: 116809
 latency_mean: 4430.0824242692
@@ -38,7 +38,7 @@ end_time: 2025-02-23T19:37:56
 
 start_time: 2025-02-23T19:38:06
 path: /db
-framework: uvicorn
+framework: uvicorn-one-worker
 latency_min: 6974
 latency_max: 1957446
 latency_mean: 92416.380882573

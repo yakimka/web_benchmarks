@@ -3,7 +3,7 @@
         {
             "start_time": "2025-02-23T17:35:15",
             "path": "plaintext",
-            "framework": "uvicroen-h11",
+            "framework": "uvicorn-h11",
             "latency_min": 742.0,
             "latency_max": 117042.0,
             "latency_mean": 4360.934921114,
@@ -23,7 +23,7 @@
         {
             "start_time": "2025-02-23T17:45:25",
             "path": "api",
-            "framework": "uvicroen-h11",
+            "framework": "uvicorn-h11",
             "latency_min": 715.0,
             "latency_max": 117987.0,
             "latency_mean": 4755.6070446169,
@@ -43,7 +43,7 @@
         {
             "start_time": "2025-02-23T17:55:36",
             "path": "db",
-            "framework": "uvicroen-h11",
+            "framework": "uvicorn-h11",
             "latency_min": 2894.0,
             "latency_max": 430891.0,
             "latency_mean": 18632.889995456,
@@ -183,7 +183,7 @@
         {
             "start_time": "2025-02-23T19:17:45",
             "path": "plaintext",
-            "framework": "uvicorn",
+            "framework": "uvicorn-one-worker",
             "latency_min": 769.0,
             "latency_max": 113834.0,
             "latency_mean": 3658.9155481139,
@@ -203,7 +203,7 @@
         {
             "start_time": "2025-02-23T19:27:55",
             "path": "api",
-            "framework": "uvicorn",
+            "framework": "uvicorn-one-worker",
             "latency_min": 697.0,
             "latency_max": 116809.0,
             "latency_mean": 4430.0824242692,
@@ -223,7 +223,7 @@
         {
             "start_time": "2025-02-23T19:38:06",
             "path": "db",
-            "framework": "uvicorn",
+            "framework": "uvicorn-one-worker",
             "latency_min": 6974.0,
             "latency_max": 1957446.0,
             "latency_mean": 92416.380882573,
