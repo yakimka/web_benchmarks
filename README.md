@@ -10,8 +10,10 @@ don't take it too seriously and always do your own benchmarks.
 
 For benchmarking I used laptop with Intel Core i5-7300hq and 24GB RAM for running
 web frameworks and MacBook Air M1 with 16GB RAM for running wrk.
+As database server I used Raspberry Pi 4B with 2GB RAM 😀, running Postgres 17,
+database was stored on tmpfs in RAM.
 
-Machines were connected via 1Gbps ethernet cable.
+All machines were connected via 1Gbps ethernet cable.
 Throughput checked with `iperf3` was around 940Mbps.
 
 <details>
@@ -53,13 +55,18 @@ Connections number is 64. While running wrk CPU usage was never at 100%, so wrk 
 
 Participants:
 
-- go-stdlib: Go stdlib http server, no dependencies, only stdlib.
-- uvicorn: ASGI server, uses `uvloop` and `httptools` for parsing requests and `orjson` for json serialization.
+- [go-stdlib](https://github.com/golang/go): Go stdlib http server, [pgx-v5](https://github.com/jackc/pgx) postgresql driver.
+- [uvicorn](https://www.uvicorn.org): ASGI server, uses
+    [uvloop](https://github.com/MagicStack/uvloop) and
+    [httptools](https://github.com/MagicStack/httptools) for parsing requests,
+    [orjson](https://github.com/ijl/orjson) for json serialization and
+    [asyncpg](https://github.com/MagicStack/asyncpg) postgresql driver.
 - uvicorn-one-worker: same as uvicorn, but with only one worker.
-- uvicorn-h11: same as uvicorn, but uses `h11` for http.
+- uvicorn-h11: same as uvicorn, but uses [h11](https://github.com/python-hyper/h11) for http.
 - uvicorn-asyncio: same as uvicorn, but uses stdlib asyncio loop.
 - uvicorn-stdlib: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
 - uvicorn-stdlib-one-worker: same as uvicorn-stdlib, but with only one worker.
+- uvicorn-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
 
 ### Plaintext
 
