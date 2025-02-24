@@ -5,12 +5,18 @@ from datetime import date, datetime
 from urllib.parse import parse_qs
 
 DATABASE_URL = os.environ["DATABASE_URL"]
+POOL_SIZE = 8
 
 if os.environ.get("PYPY_VERSION"):
     from psycopg.rows import dict_row
     from psycopg_pool import AsyncConnectionPool
 
-    pool = AsyncConnectionPool(DATABASE_URL, open=False)
+    pool = AsyncConnectionPool(
+        DATABASE_URL,
+        open=False,
+        min_size=POOL_SIZE,
+        max_size=POOL_SIZE,
+    )
 
 
     async def init_db():
@@ -40,8 +46,8 @@ else:
         if pool is None:
             pool = await asyncpg.create_pool(
                 dsn=DATABASE_URL,
-                min_size=8,
-                max_size=8,
+                min_size=POOL_SIZE,
+                max_size=POOL_SIZE,
             )
         return pool
 
