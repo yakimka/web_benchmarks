@@ -1,16 +1,22 @@
 #!/usr/bin/env sh
 
 if [ -z "$1" ]; then
-  echo "Error: Missing name."
-  echo "Usage: $0 <name> [host] [duration] [threads] [connections]"
+  echo "Error: Missing host."
+  echo "Usage: $0 <host> <name> [duration] [threads] [connections]"
   exit 1
 fi
 
-name="$1"
-host="${2:-http://127.0.0.1:8000}"
+if [ -z "$2" ]; then
+  echo "Error: Missing name."
+  echo "Usage: $0 <host> <name> [duration] [threads] [connections]"
+  exit 1
+fi
+
+host="$1"
+name="$2"
 duration="${3:-600}"
 threads="${4:-8}"
-connections="${5:-180}"
+connections="${5:-64}"
 
 export NAME=$name
 mkdir -p ./results
@@ -29,5 +35,11 @@ echo "Warming up for 10 seconds"
 wrk -t 4 -c 40 -d 10 $host/api > /dev/null 2>&1
 echo "Running for $duration seconds"
 wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua -H "X-Header: somevaluefromheader" "$host/api?query=somequerystringfromclient"
+
+echo "DB endpoint"
+echo "Warming up for 10 seconds"
+wrk -t 4 -c 40 -d 10 $host/db > /dev/null 2>&1
+echo "Running for $duration seconds"
+wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/db
 
 echo "All done!"

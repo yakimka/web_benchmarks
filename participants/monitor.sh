@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INTERVAL=2
+INTERVAL=3
 
 while true
 do
@@ -9,8 +9,8 @@ do
   docker compose stats --no-stream --format \
   "{{.CPUPerc}},{{.MemUsage}},{{.MemPerc}}" \
   | while read line; do
-      echo "$TIMESTAMP,$line"
-    done >> docker_stats.log
+      echo "$TIMESTAMP,$line" | tee -a docker_stats.log
+    done
 
   sleep $INTERVAL
 done
