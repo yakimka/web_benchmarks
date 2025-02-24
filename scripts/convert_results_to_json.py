@@ -32,7 +32,7 @@ class ServerStats(TypedDict):
 
 
 CONVERTERS = {
-    "path": lambda x: x.removeprefix("/").strip(),
+    "path": lambda x: x.split("?")[0].removeprefix("/").strip(),
     "start_time": str,
     "end_time": str,
     "framework": str,
@@ -84,10 +84,13 @@ def _parse_percents(text: str) -> float:
     return float(text[:-1])
 
 def _parse_memory(text: str) -> float:
+    text = text.strip()
     if text.endswith("MiB"):
         return float(text[:-3])
+    elif text == "0B":
+        return 0
     else:
-        raise ValueError("Memory format not recognized")
+        raise ValueError(f"Memory format not recognized: {text}.")
 
 
 def main(args):

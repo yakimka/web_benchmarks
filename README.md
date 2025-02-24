@@ -6,7 +6,6 @@ Just a simple benchmark to compare the overhead of some web frameworks.
 Not representative of real world usage,
 don't take it too seriously and always do your own benchmarks.
 
-
 ## Methodology
 
 For benchmarking I used laptop with Intel Core i5-7300hq and 24GB RAM for running
@@ -148,4 +147,51 @@ framework validation and json serialization.
     <summary>Latency 99th</summary>
 
 ![results/images/api_latency_99th.png](results/images/api_latency_99th.png)
+</details>
+
+
+
+### Database
+
+Database workload - this is more representative of real world usage.
+One query to select 1 row by id and another query to select 100 rows.
+All data retrieved from database instantiated as some structure
+(for example - dataclasses in Python and Struct in Go) and then serialized to json.
+
+
+![results/images/db_rps.png](results/images/db_rps.png)
+![results/images/db_cpu_avg_percent.png](results/images/db_cpu_avg_percent.png)
+
+<details>
+    <summary>CPU median</summary>
+
+![results/images/db_cpu_median_percent.png](results/images/db_cpu_median_percent.png)
+</details>
+
+![results/images/db_memory_median_mb.png](results/images/db_memory_median_mb.png)
+
+<details>
+    <summary>Memory max</summary>
+
+![results/images/db_memory_max_mb.png](results/images/db_memory_max_mb.png)
+</details>
+
+![results/images/db_latency_avg.png](results/images/db_latency_avg.png)
+
+<details>
+    <summary>Latency max</summary>
+
+![results/images/db_latency_max.png](results/images/db_latency_max.png)
+</details>
+
+<details>
+    <summary>Latency 90th</summary>
+
+![results/images/db_latency_90th.png](results/images/db_latency_90th.png)
+</details>
+
+<details>
+    <summary>Latency 99th</summary>
+
+![results/images/db_latency_99th.png](results/images/db_latency_99th.png)
 </details>

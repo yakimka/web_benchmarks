@@ -67,42 +67,7 @@ Just a simple plaintext response. Dont't expect too much from it,
 not representative of real world usage, just a simple overhead comparison.
 
 {% with test_images=images["plaintext"] %}
-![{{ test_images.rps }}]({{ test_images.rps }})
-![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
-
-<details>
-    <summary>CPU median</summary>
-
-![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
-</details>
-
-![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
-
-<details>
-    <summary>Memory max</summary>
-
-![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
-</details>
-
-![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
-
-<details>
-    <summary>Latency max</summary>
-
-![{{ test_images.latency_max }}]({{ test_images.latency_max }})
-</details>
-
-<details>
-    <summary>Latency 90th</summary>
-
-![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
-</details>
-
-<details>
-    <summary>Latency 99th</summary>
-
-![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
-</details>
+{% include 'test_images.jinja2' %}
 {% endwith %}
 
 ### API
@@ -112,40 +77,17 @@ Again, not representative of real world usage, just a simple overhead comparison
 framework validation and json serialization.
 
 {% with test_images=images["api"] %}
-![{{ test_images.rps }}]({{ test_images.rps }})
-![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
+{% include 'test_images.jinja2' %}
+{% endwith %}
 
-<details>
-    <summary>CPU median</summary>
 
-![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
-</details>
+### Database
 
-![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
+Database workload - this is more representative of real world usage.
+One query to select 1 row by id and another query to select 100 rows.
+All data retrieved from database instantiated as some structure
+(for example - dataclasses in Python and Struct in Go) and then serialized to json.
 
-<details>
-    <summary>Memory max</summary>
-
-![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
-</details>
-
-![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
-
-<details>
-    <summary>Latency max</summary>
-
-![{{ test_images.latency_max }}]({{ test_images.latency_max }})
-</details>
-
-<details>
-    <summary>Latency 90th</summary>
-
-![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
-</details>
-
-<details>
-    <summary>Latency 99th</summary>
-
-![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
-</details>
+{% with test_images=images["db"] %}
+{% include 'test_images.jinja2' %}
 {% endwith %}

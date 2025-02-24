@@ -138,6 +138,7 @@ def create_chart(names: list[str], values: list[float], title: str, filename: st
     # https://stackoverflow.com/questions/1271023/
     plt.savefig(filename, dpi=300, bbox_inches="tight")
     # plt.show()
+    plt.close()
 
 
 def parse_results(results: dict) -> dict[str, dict[str, BenchmarkResults]]:
