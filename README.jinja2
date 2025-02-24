@@ -10,8 +10,10 @@ don't take it too seriously and always do your own benchmarks.
 
 For benchmarking I used laptop with Intel Core i5-7300hq and 24GB RAM for running
 web frameworks and MacBook Air M1 with 16GB RAM for running wrk.
+As database server I used Raspberry Pi 4B with 2GB RAM 😀, running Postgres 17,
+database was stored on tmpfs in RAM.
 
-Machines were connected via 1Gbps ethernet cable.
+All machines were connected via 1Gbps ethernet cable.
 Throughput checked with `iperf3` was around 940Mbps.
 
 <details>
@@ -53,13 +55,18 @@ Connections number is 64. While running wrk CPU usage was never at 100%, so wrk 
 
 Participants:
 
-- go-stdlib: Go stdlib http server, no dependencies, only stdlib.
-- uvicorn: ASGI server, uses `uvloop` and `httptools` for parsing requests and `orjson` for json serialization.
+- [go-stdlib](https://github.com/golang/go): Go stdlib http server, [pgx-v5](https://github.com/jackc/pgx) postgresql driver.
+- [uvicorn](https://www.uvicorn.org): ASGI server, uses
+    [uvloop](https://github.com/MagicStack/uvloop) and
+    [httptools](https://github.com/MagicStack/httptools) for parsing requests,
+    [orjson](https://github.com/ijl/orjson) for json serialization and
+    [asyncpg](https://github.com/MagicStack/asyncpg) postgresql driver.
 - uvicorn-one-worker: same as uvicorn, but with only one worker.
-- uvicorn-h11: same as uvicorn, but uses `h11` for http.
+- uvicorn-h11: same as uvicorn, but uses [h11](https://github.com/python-hyper/h11) for http.
 - uvicorn-asyncio: same as uvicorn, but uses stdlib asyncio loop.
 - uvicorn-stdlib: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
 - uvicorn-stdlib-one-worker: same as uvicorn-stdlib, but with only one worker.
+- uvicorn-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
 
 ### Plaintext
 
@@ -67,42 +74,7 @@ Just a simple plaintext response. Dont't expect too much from it,
 not representative of real world usage, just a simple overhead comparison.
 
 {% with test_images=images["plaintext"] %}
-![{{ test_images.rps }}]({{ test_images.rps }})
-![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
-
-<details>
-    <summary>CPU median</summary>
-
-![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
-</details>
-
-![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
-
-<details>
-    <summary>Memory max</summary>
-
-![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
-</details>
-
-![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
-
-<details>
-    <summary>Latency max</summary>
-
-![{{ test_images.latency_max }}]({{ test_images.latency_max }})
-</details>
-
-<details>
-    <summary>Latency 90th</summary>
-
-![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
-</details>
-
-<details>
-    <summary>Latency 99th</summary>
-
-![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
-</details>
+{% include 'test_images.jinja2' %}
 {% endwith %}
 
 ### API
@@ -112,40 +84,17 @@ Again, not representative of real world usage, just a simple overhead comparison
 framework validation and json serialization.
 
 {% with test_images=images["api"] %}
-![{{ test_images.rps }}]({{ test_images.rps }})
-![{{ test_images.cpu_avg_percent }}]({{ test_images.cpu_avg_percent }})
+{% include 'test_images.jinja2' %}
+{% endwith %}
 
-<details>
-    <summary>CPU median</summary>
 
-![{{ test_images.cpu_median_percent }}]({{ test_images.cpu_median_percent }})
-</details>
+### Database
 
-![{{ test_images.memory_median_mb }}]({{ test_images.memory_median_mb }})
+Database workload - this is more representative of real world usage.
+One query to select 1 row by id and another query to select 100 rows.
+All data retrieved from database instantiated as some structure
+(for example - dataclasses in Python and Struct in Go) and then serialized to json.
 
-<details>
-    <summary>Memory max</summary>
-
-![{{ test_images.memory_max_mb }}]({{ test_images.memory_max_mb }})
-</details>
-
-![{{ test_images.latency_avg }}]({{ test_images.latency_avg }})
-
-<details>
-    <summary>Latency max</summary>
-
-![{{ test_images.latency_max }}]({{ test_images.latency_max }})
-</details>
-
-<details>
-    <summary>Latency 90th</summary>
-
-![{{ test_images.latency_90th }}]({{ test_images.latency_90th }})
-</details>
-
-<details>
-    <summary>Latency 99th</summary>
-
-![{{ test_images.latency_99th }}]({{ test_images.latency_99th }})
-</details>
+{% with test_images=images["db"] %}
+{% include 'test_images.jinja2' %}
 {% endwith %}
