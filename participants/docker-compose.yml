@@ -83,6 +83,21 @@ services:
       - WEB_CONCURRENCY=4
     ports:
       - "8000:8000"
+  fastapi:
+    build:
+      context: python/fastapi
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "8000:8000"
+  fastapi-sync-endpoints:
+    build:
+      context: python/fastapi
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SYNC_ENDPOINTS=1
+    ports:
+      - "8000:8000"
 
 networks:
   default:
