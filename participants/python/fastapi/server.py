@@ -5,12 +5,13 @@ from datetime import date, datetime
 from typing import Annotated
 
 import asyncpg
-from fastapi import FastAPI, Header, Query
-from fastapi.responses import ORJSONResponse
+from fastapi import Depends, FastAPI, Header, Query
+from fastapi.responses import ORJSONResponse, PlainTextResponse
 from pydantic import BaseModel, Field
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 SYNC_ENDPOINTS = os.environ.get("SYNC_ENDPOINTS")
+SYNC_DEPENDENCY = os.environ.get("SYNC_DEPENDENCY")
 POOL_SIZE = 8
 
 
@@ -42,6 +43,16 @@ async def lifespan(app: FastAPI):
     await pool.close()
 
 
+async def async_hello() -> str:
+    return "Hello, world!"
+
+
+def sync_hello() -> str:
+    return "Hello, world!"
+
+
+get_hello = sync_hello if SYNC_DEPENDENCY else async_hello
+
 app = FastAPI(
     default_response_class=ORJSONResponse,
     lifespan=lifespan,
@@ -49,34 +60,36 @@ app = FastAPI(
 
 
 if SYNC_ENDPOINTS:
-    @app.get("/plaintext")
-    def sync_plaintext() -> str:
-        return "Hello, world!"
+    @app.get("/plaintext", response_class=PlainTextResponse)
+    def sync_plaintext(hello: Annotated[str, Depends(get_hello)]) -> str:
+        return hello
 else:
-    @app.get("/plaintext")
-    async def async_plaintext() -> str:
-        return "Hello, world!"
+    @app.get("/plaintext", response_class=PlainTextResponse)
+    async def async_plaintext(hello: Annotated[str, Depends(get_hello)]) -> str:
+        return hello
 
 
 if SYNC_ENDPOINTS:
     @app.get("/api")
     def sync_api(
+        hello: Annotated[str, Depends(get_hello)],
         query: Annotated[str, Query()] = "",
         x_header: Annotated[str, Header()] = "",
     ) -> dict:
         return {
-            "message": "Hello, world!",
+            "message": hello,
             "from_query": query,
             "from_header": x_header,
         }
 else:
     @app.get("/api")
     async def async_api(
+        hello: Annotated[str, Depends(get_hello)],
         query: Annotated[str, Query()] = "",
         x_header: Annotated[str, Header()] = "",
     ) -> dict:
         return {
-            "message": "Hello, world!",
+            "message": hello,
             "from_query": query,
             "from_header": x_header,
         }
@@ -128,7 +141,7 @@ class Device:
 
 
 @app.get("/db", response_model=list[DeviceResponse])
-async def db() -> list[Device]:
+async def db(hello: Annotated[str, Depends(get_hello)]) -> list[Device]:
     users_data, devices_data = await fetch_data()
 
     user = User(**users_data[0])
