@@ -16,3 +16,4 @@ services:
 networks:
   default:
     name: webbench
+    external: true

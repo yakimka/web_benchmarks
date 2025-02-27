@@ -106,7 +106,31 @@ services:
       - SYNC_DEPENDENCY=1
     ports:
       - "8000:8000"
+  django-sync-worker:
+    build:
+      context: python/django
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+    ports:
+      - "8000:8000"
+  django-gthread-worker:
+    build:
+      context: python/django
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - THREADS=10
+    ports:
+      - "8000:8000"
+  django-asgi:
+    build:
+      context: python/django
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - ASYNC_MODE=1
+    ports:
+      - "8000:8000"
 
 networks:
   default:
     name: webbench
+    external: true
