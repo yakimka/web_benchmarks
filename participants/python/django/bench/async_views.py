@@ -4,7 +4,8 @@ from datetime import date, datetime
 from asgiref.sync import sync_to_async
 from django.http import HttpResponse, JsonResponse
 
-from .models import Device as DeviceModel, User as UserModel
+from .models import Device as DeviceModel
+from .models import User as UserModel
 
 
 async def plaintext(request):

@@ -31,8 +31,8 @@ async def init_db():
 
 async def fetch_data():
     async with pool.acquire() as conn:
-        users = await conn.fetch('SELECT * FROM users WHERE id = $1', 1)
-        devices = await conn.fetch('SELECT * FROM devices LIMIT 10')
+        users = await conn.fetch("SELECT * FROM users WHERE id = $1", 1)
+        devices = await conn.fetch("SELECT * FROM devices LIMIT 10")
     return users, devices
 
 
@@ -60,16 +60,20 @@ app = FastAPI(
 
 
 if SYNC_ENDPOINTS:
+
     @app.get("/plaintext", response_class=PlainTextResponse)
     def sync_plaintext(hello: Annotated[str, Depends(get_hello)]) -> str:
         return hello
+
 else:
+
     @app.get("/plaintext", response_class=PlainTextResponse)
     async def async_plaintext(hello: Annotated[str, Depends(get_hello)]) -> str:
         return hello
 
 
 if SYNC_ENDPOINTS:
+
     @app.get("/api")
     def sync_api(
         hello: Annotated[str, Depends(get_hello)],
@@ -81,7 +85,9 @@ if SYNC_ENDPOINTS:
             "from_query": query,
             "from_header": x_header,
         }
+
 else:
+
     @app.get("/api")
     async def async_api(
         hello: Annotated[str, Depends(get_hello)],

@@ -2,8 +2,7 @@ import os
 
 from django.urls import path
 
-from . import views
-from . import async_views
+from . import async_views, views
 
 ASYNC_MODE = os.getenv("ASYNC_MODE") == "1"
 

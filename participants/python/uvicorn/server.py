@@ -1,7 +1,6 @@
 import os
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
-
 from urllib.parse import parse_qs
 
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -18,20 +17,18 @@ if os.environ.get("PYPY_VERSION"):
         max_size=POOL_SIZE,
     )
 
-
     async def init_db():
         await pool.open()
-
 
     async def fetch_data():
         async with pool.connection() as conn:
             conn.row_factory = dict_row
 
             async with conn.cursor() as cur:
-                await cur.execute('SELECT * FROM users WHERE id = %s', (1,))
+                await cur.execute("SELECT * FROM users WHERE id = %s", (1,))
                 users = await cur.fetchall()
 
-                await cur.execute('SELECT * FROM devices LIMIT 10')
+                await cur.execute("SELECT * FROM devices LIMIT 10")
                 devices = await cur.fetchall()
         return users, devices
 
@@ -39,7 +36,6 @@ else:
     import asyncpg
 
     pool = None
-
 
     async def init_db():
         global pool
@@ -51,11 +47,10 @@ else:
             )
         return pool
 
-
     async def fetch_data():
         async with pool.acquire() as conn:
-            users = await conn.fetch('SELECT * FROM users WHERE id = $1', 1)
-            devices = await conn.fetch('SELECT * FROM devices LIMIT 10')
+            users = await conn.fetch("SELECT * FROM users WHERE id = $1", 1)
+            devices = await conn.fetch("SELECT * FROM devices LIMIT 10")
         return users, devices
 
 
@@ -67,9 +62,9 @@ if JSON_LIBRARY == "orjson":
 elif JSON_LIBRARY == "stdlib":
     import json
 
-
     def json_dumps(data, **kwargs):
         return json.dumps(data, **kwargs).encode("utf-8")
+
 else:
     raise ValueError(f"Unknown JSON_LIBRARY: {JSON_LIBRARY}")
 
@@ -78,7 +73,7 @@ JSON_RESPONSE = {
     "status": 200,
     "headers": [
         [b"content-type", b"application/json"],
-    ]
+    ],
 }
 
 PLAINTEXT_RESPONSE = {
@@ -86,7 +81,7 @@ PLAINTEXT_RESPONSE = {
     "status": 200,
     "headers": [
         [b"content-type", b"text/plain; charset=utf-8"],
-    ]
+    ],
 }
 
 
@@ -110,13 +105,7 @@ async def api(scope, receive, send):
         }
     )
     await send(JSON_RESPONSE)
-    await send(
-        {
-            "type": "http.response.body",
-            "body": content,
-            "more_body": False
-        }
-    )
+    await send({"type": "http.response.body", "body": content, "more_body": False})
 
 
 async def plaintext(scope, receive, send):
@@ -125,13 +114,7 @@ async def plaintext(scope, receive, send):
     """
     content = b"Hello, world!"
     await send(PLAINTEXT_RESPONSE)
-    await send(
-        {
-            "type": "http.response.body",
-            "body": content,
-            "more_body": False
-        }
-    )
+    await send({"type": "http.response.body", "body": content, "more_body": False})
 
 
 @dataclass
@@ -172,25 +155,13 @@ async def db(scope, receive, send):
     devices = [Device(**fields) for fields in devices_data]
     content = json_dumps([asdict(device) for device in devices], default=str)
     await send(JSON_RESPONSE)
-    await send(
-        {
-            "type": "http.response.body",
-            "body": content,
-            "more_body": False
-        }
-    )
+    await send({"type": "http.response.body", "body": content, "more_body": False})
 
 
 async def handle_404(scope, receive, send):
     content = b"Not found"
     await send(PLAINTEXT_RESPONSE)
-    await send(
-        {
-            "type": "http.response.body",
-            "body": content,
-            "more_body": False
-        }
-    )
+    await send({"type": "http.response.body", "body": content, "more_body": False})
 
 
 routes = {

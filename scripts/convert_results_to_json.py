@@ -38,6 +38,7 @@ CONVERTERS = {
     "framework": str,
 }
 
+
 def parse_wrk_results(wrk_result: str) -> list[WrkResults]:
     lines = wrk_result.splitlines()
     results = [{}]
@@ -72,7 +73,7 @@ def parse_server_stats(log: str) -> list[ServerStats]:
             {
                 "time": log_time,
                 "cpu_percent": _parse_percents(cpu),
-                "memory_usage_mb": _parse_memory(used_memory)
+                "memory_usage_mb": _parse_memory(used_memory),
             }
         )
     return results
@@ -82,6 +83,7 @@ def _parse_percents(text: str) -> float:
     if not text.endswith("%"):
         raise ValueError("Percent format not recognized")
     return float(text[:-1])
+
 
 def _parse_memory(text: str) -> float:
     text = text.strip()
@@ -105,15 +107,18 @@ def main(args):
         server_stats.extend(parse_server_stats(log))
 
     with open(args.output, "w") as f:
-        f.write(json.dumps({
-            "wrk_results": wrk_results,
-            "server_stats": server_stats
-        }, indent=4))
+        f.write(
+            json.dumps(
+                {"wrk_results": wrk_results, "server_stats": server_stats}, indent=4
+            )
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("directory", type=str, help="Directory containing the results")
-    parser.add_argument("--output", type=str, default="results.json", help="Output file")
+    parser.add_argument(
+        "--output", type=str, default="results.json", help="Output file"
+    )
     args = parser.parse_args()
     main(args)

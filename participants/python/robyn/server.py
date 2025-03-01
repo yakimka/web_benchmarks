@@ -2,15 +2,14 @@ import os
 from dataclasses import asdict, dataclass
 from datetime import date, datetime
 
+import asyncpg
 from robyn import Response, Robyn, jsonify
 from robyn.robyn import QueryParams
-
-import asyncpg
-
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 POOL_SIZE = 8
 pool = None
+
 
 async def init_db():
     global pool
@@ -25,8 +24,8 @@ async def init_db():
 
 async def fetch_data():
     async with pool.acquire() as conn:
-        users = await conn.fetch('SELECT * FROM users WHERE id = $1', 1)
-        devices = await conn.fetch('SELECT * FROM devices LIMIT 10')
+        users = await conn.fetch("SELECT * FROM users WHERE id = $1", 1)
+        devices = await conn.fetch("SELECT * FROM devices LIMIT 10")
     return users, devices
 
 

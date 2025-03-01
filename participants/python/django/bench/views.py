@@ -3,7 +3,8 @@ from datetime import date, datetime
 
 from django.http import HttpResponse, JsonResponse
 
-from .models import User as UserModel, Device as DeviceModel
+from .models import Device as DeviceModel
+from .models import User as UserModel
 
 
 def plaintext(request):
