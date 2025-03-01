@@ -129,6 +129,13 @@ services:
       - ASYNC_MODE=1
     ports:
       - "8000:8000"
+  robyn:
+    build:
+      context: python/robyn
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "8000:8000"
 
 networks:
   default:
