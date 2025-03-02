@@ -12,7 +12,7 @@ if [ "${ASYNC_MODE}" == "1" ]; then
 else
   gunicorn --pid=gunicorn.pid \
     server.wsgi:application \
-    --worker-class=sync \
+    --worker-class=${WORKER_CLASS:-"sync"} \
     --workers=10 \
     --threads=${THREADS:-1} \
     --bind=0.0.0.0:8000 \

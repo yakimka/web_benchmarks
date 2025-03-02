@@ -111,6 +111,7 @@ services:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
+      - WORKER_CLASS=sync
     ports:
       - "8000:8000"
   django-gthread-worker:
@@ -118,7 +119,16 @@ services:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
+      - WORKER_CLASS=gthread
       - THREADS=10
+    ports:
+      - "8000:8000"
+  django-gevent-worker:
+    build:
+      context: python/django
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - WORKER_CLASS=gevent
     ports:
       - "8000:8000"
   django-asgi:

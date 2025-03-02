@@ -198,7 +198,7 @@ def make_app(app: App):
         app.json_serializer(orjson)
 
 
-if __name__ == "__main__":
+def run_app():
     app = App()
     make_app(app)
     app.listen(
@@ -208,3 +208,20 @@ if __name__ == "__main__":
         ),
     )
     app.run()
+
+
+def create_fork():
+    n = os.fork()
+    # n greater than 0 means parent process
+    if n > 0:
+        return
+    run_app()
+
+
+WORKER_COUNT = 4
+
+
+for _ in range(WORKER_COUNT):
+    create_fork()
+
+run_app()
