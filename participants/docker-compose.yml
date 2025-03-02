@@ -136,6 +136,47 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     ports:
       - "8000:8000"
+  socketify-async:
+    build:
+      context: python/socketify
+    platform: linux/amd64
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SQL_DRIVER=asyncpg
+    ports:
+      - "8000:8000"
+  socketify-sync:
+    build:
+      context: python/socketify
+      dockerfile: Dockerfile.psycopg
+    platform: linux/amd64
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SYNC_ENDPOINTS=1
+      - SQL_DRIVER=psycopg_sync
+    ports:
+      - "8000:8000"
+  socketify-async-pypy:
+    build:
+      context: python/socketify
+      dockerfile: Dockerfile.psycopg_pypy
+    platform: linux/amd64
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SQL_DRIVER=psycopg_async
+    ports:
+      - "8000:8000"
+  socketify-sync-pypy:
+    build:
+      context: python/socketify
+      dockerfile: Dockerfile.psycopg_pypy
+    platform: linux/amd64
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - SYNC_ENDPOINTS=1
+      - SQL_DRIVER=psycopg_sync
+    ports:
+      - "8000:8000"
 
 networks:
   default:
