@@ -241,6 +241,14 @@ services:
     ports:
       - "8000:8000"
 
+  laravel:
+    build:
+      context: php/laravel
+      args:
+        - POSTGRES_HOST=${POSTGRES_HOST}
+    ports:
+      - "8000:8000"
+
 networks:
   default:
     name: webbench
