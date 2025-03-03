@@ -187,6 +187,59 @@ services:
       - SQL_DRIVER=psycopg_sync
     ports:
       - "8000:8000"
+  falcon-wsgi-sync-worker:
+    build:
+      context: python/falcon
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=sync
+    ports:
+      - "8000:8000"
+  falcon-wsgi-gthread-worker:
+    build:
+      context: python/falcon
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=gthread
+      - THREADS=10
+    ports:
+      - "8000:8000"
+  falcon-wsgi-gevent-worker:
+    build:
+      context: python/falcon
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=gevent
+    ports:
+      - "8000:8000"
+  falcon-wsgi-sync-worker-pypy:
+    build:
+      context: python/falcon
+      dockerfile: Dockerfile.pypy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=sync
+    ports:
+      - "8000:8000"
+  falcon-wsgi-gthread-worker-pypy:
+    build:
+      context: python/falcon
+      dockerfile: Dockerfile.pypy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=gthread
+      - THREADS=10
+    ports:
+      - "8000:8000"
+  falcon-wsgi-gevent-worker-pypy:
+    build:
+      context: python/falcon
+      dockerfile: Dockerfile.pypy
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - WORKER_CLASS=gevent
+    ports:
+      - "8000:8000"
 
 networks:
   default:
