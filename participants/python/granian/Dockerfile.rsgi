@@ -1,0 +1,13 @@
+FROM python:3.12.7-slim
+
+COPY requirements.txt /app/
+
+RUN pip install -r /app/requirements.txt
+
+COPY server_rsgi.py /app/server_rsgi.py
+
+
+EXPOSE 8000
+WORKDIR /app
+
+CMD ["granian", "--interface=rsgi", "--workers=4", "--host=0.0.0.0", "--port=8000", "--loop=auto", "--log-level=info", "--no-access-log", "server_rsgi:app"]
