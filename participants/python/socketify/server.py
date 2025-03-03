@@ -8,12 +8,10 @@ try:
     import orjson
 
     json_dumps = orjson.dumps
-    use_orjson = True
 except ImportError:
     import json
 
     json_dumps = json.dumps
-    use_orjson = False
 
 
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -111,12 +109,15 @@ def sync_plaintext(res, req):
 async def async_api(res, req):
     from_query = req.get_query("query")
     from_header = req.get_header("x-header")
-    res.end(
-        {
-            "message": "Hello, World!",
-            "from_query": from_query,
-            "from_header": from_header,
-        }
+    res.write_header("Content-Type", "application/json")
+    res.cork_end(
+        json_dumps(
+            {
+                "message": "Hello, World!",
+                "from_query": from_query,
+                "from_header": from_header,
+            }
+        )
     )
 
 
@@ -194,8 +195,6 @@ def make_app(app: App):
         app.get("/api", async_api)
         app.get("/db", async_db)
     app.set_error_handler(on_error)
-    if use_orjson:
-        app.json_serializer(orjson)
 
 
 def run_app():
