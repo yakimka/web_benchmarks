@@ -240,10 +240,17 @@ services:
       - WORKER_CLASS=gevent
     ports:
       - "8000:8000"
-
   laravel:
     build:
       context: php/laravel
+      args:
+        - POSTGRES_HOST=${POSTGRES_HOST}
+    ports:
+      - "8000:8000"
+  laravel-octane-franken:
+    build:
+      context: php/laravel
+      dockerfile: Dockerfile.octane-frankenphp
       args:
         - POSTGRES_HOST=${POSTGRES_HOST}
     ports:

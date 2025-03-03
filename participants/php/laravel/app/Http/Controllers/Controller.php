@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Device;
+use App\Dto\UserDTO;
+use App\Dto\DeviceDTO;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -29,6 +31,10 @@ class Controller extends BaseController
     {
         $user = User::query()->find(1);
         $devices = Device::query()->get();
-        return response()->json($devices);
+
+        $userDTO = new UserDTO($user);
+        $deviceDTOs = $devices->map(fn($device) => new DeviceDTO($device));
+
+        return response()->json($deviceDTOs);
     }
 }

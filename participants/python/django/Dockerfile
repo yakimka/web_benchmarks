@@ -2,7 +2,7 @@ FROM python:3.12.7-slim
 
 COPY requirements.txt /app/requirements.txt
 
-RUN apt-get update && apt-get install -y --no-install-recommends libpq5 \
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean \
     && apt-get autoremove -y
