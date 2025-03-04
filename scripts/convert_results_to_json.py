@@ -87,7 +87,9 @@ def _parse_percents(text: str) -> float:
 
 def _parse_memory(text: str) -> float:
     text = text.strip()
-    if text.endswith("MiB"):
+    if text.endswith("KiB"):
+        return float(text[:-3]) / 1024
+    elif text.endswith("MiB"):
         return float(text[:-3])
     elif text == "0B":
         return 0

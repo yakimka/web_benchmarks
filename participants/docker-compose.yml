@@ -7,6 +7,7 @@ x-common: &common
       hard: 1048576
   sysctls:
     - net.core.somaxconn=4096
+    - net.ipv4.tcp_max_syn_backlog=2048
   ports:
     - "8000:8000"
 

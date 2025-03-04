@@ -67,6 +67,8 @@ Participants:
 - uvicorn-stdlib: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
 - uvicorn-stdlib-one-worker: same as uvicorn-stdlib, but with only one worker.
 - uvicorn-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
+- granian-asgi: [granian](https://github.com/emmett-framework/granian) + asyncpg + orjson + uvloop
+- granian-rsgi: same as granian-asgi but with [RSGI](https://github.com/emmett-framework/granian/blob/master/docs/spec/RSGI.md) server
 - [fastapi](https://github.com/fastapi/fastapi): fastapi + orjson + asyncpg, every view has async fastapi dependency.
 - fastapi-sync-endpoints: same as fastapi, but with sync views, db endpoint is not included in tests.
 - fastapi-sync-dependency: same as fastapi, but every endpoint has sync fastapi dependency.
