@@ -2,6 +2,7 @@
 
 python -m robyn \
   server.py \
+  --fast \
   --processes=4 \
-  --workers=9 \
+  --workers=2 \
   --log-level=WARN

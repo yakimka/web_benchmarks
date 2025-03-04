@@ -10,4 +10,5 @@ COPY server_rsgi.py /app/server_rsgi.py
 EXPOSE 8000
 WORKDIR /app
 
-CMD ["granian", "--interface=rsgi", "--workers=4", "--host=0.0.0.0", "--port=8000", "--loop=auto", "--log-level=info", "--no-access-log", "server_rsgi:app"]
+# workers=cpu_count() * 0.75 - leave 25% cpu to the Rust runtime
+CMD ["granian", "--interface=rsgi", "--workers=3", "--host=0.0.0.0", "--port=8000", "--loop=auto", "--log-level=info", "--no-access-log", "server_rsgi:app"]
