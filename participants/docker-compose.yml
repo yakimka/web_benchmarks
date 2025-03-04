@@ -1,14 +1,23 @@
 ---
 
+x-common: &common
+  ulimits:
+    nofile:
+      soft: 1048576
+      hard: 1048576
+  sysctls:
+    - net.core.somaxconn=4096
+  ports:
+    - "8000:8000"
+
 services:
   go-stdlib:
+    <<: *common
     build:
       context: go/stdlib
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
-    ports:
-      - "8000:8000"
+
   uvicorn:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -17,9 +26,9 @@ services:
       - LOOP=uvloop
       - HTTP=httptools
       - JSON_LIBRARY=orjson
-    ports:
-      - "8000:8000"
+
   uvicorn-h11:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -28,9 +37,9 @@ services:
       - LOOP=uvloop
       - HTTP=h11
       - JSON_LIBRARY=orjson
-    ports:
-      - "8000:8000"
+
   uvicorn-one-worker:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -39,9 +48,9 @@ services:
       - LOOP=uvloop
       - HTTP=httptools
       - JSON_LIBRARY=orjson
-    ports:
-      - "8000:8000"
+
   uvicorn-asyncio:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -50,9 +59,9 @@ services:
       - LOOP=asyncio
       - HTTP=httptools
       - JSON_LIBRARY=orjson
-    ports:
-      - "8000:8000"
+
   uvicorn-stdlib:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -61,9 +70,9 @@ services:
       - LOOP=asyncio
       - HTTP=h11
       - JSON_LIBRARY=stdlib
-    ports:
-      - "8000:8000"
+
   uvicorn-stdlib-one-worker:
+    <<: *common
     build:
       context: python/uvicorn
     environment:
@@ -72,106 +81,106 @@ services:
       - LOOP=asyncio
       - HTTP=h11
       - JSON_LIBRARY=stdlib
-    ports:
-      - "8000:8000"
+
   uvicorn-pypy:
+    <<: *common
     build:
       context: python/uvicorn
       dockerfile: Dockerfile.pypy
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WEB_CONCURRENCY=4
-    ports:
-      - "8000:8000"
+
   granian-asgi:
+    <<: *common
     build:
       context: python/granian
       dockerfile: Dockerfile.asgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    ports:
-      - "8000:8000"
+
   granian-rsgi:
+    <<: *common
     build:
       context: python/granian
       dockerfile: Dockerfile.rsgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    ports:
-      - "8000:8000"
+
   fastapi:
+    <<: *common
     build:
       context: python/fastapi
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    ports:
-      - "8000:8000"
+
   fastapi-sync-endpoints:
+    <<: *common
     build:
       context: python/fastapi
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
-    ports:
-      - "8000:8000"
+
   fastapi-sync-dependency:
+    <<: *common
     build:
       context: python/fastapi
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_DEPENDENCY=1
-    ports:
-      - "8000:8000"
+
   django-sync-worker:
+    <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=sync
-    ports:
-      - "8000:8000"
+
   django-gthread-worker:
+    <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gthread
       - THREADS=10
-    ports:
-      - "8000:8000"
+
   django-gevent-worker:
+    <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gevent
-    ports:
-      - "8000:8000"
+
   django-asgi:
+    <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - ASYNC_MODE=1
-    ports:
-      - "8000:8000"
+
   robyn:
+    <<: *common
     build:
       context: python/robyn
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    ports:
-      - "8000:8000"
+
   socketify-async:
+    <<: *common
     build:
       context: python/socketify
     platform: linux/amd64
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=asyncpg
-    ports:
-      - "8000:8000"
+
   socketify-sync:
+    <<: *common
     build:
       context: python/socketify
       dockerfile: Dockerfile.psycopg
@@ -180,9 +189,9 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
-    ports:
-      - "8000:8000"
+
   socketify-async-pypy:
+    <<: *common
     build:
       context: python/socketify
       dockerfile: Dockerfile.psycopg_pypy
@@ -190,9 +199,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=psycopg_async
-    ports:
-      - "8000:8000"
+
   socketify-sync-pypy:
+    <<: *common
     build:
       context: python/socketify
       dockerfile: Dockerfile.psycopg_pypy
@@ -201,43 +210,43 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-sync-worker:
+    <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-gthread-worker:
+    <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
       - THREADS=10
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-gevent-worker:
+    <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-sync-worker-pypy:
+    <<: *common
     build:
       context: python/falcon
       dockerfile: Dockerfile.pypy
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-gthread-worker-pypy:
+    <<: *common
     build:
       context: python/falcon
       dockerfile: Dockerfile.pypy
@@ -245,32 +254,30 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
       - THREADS=10
-    ports:
-      - "8000:8000"
+
   falcon-wsgi-gevent-worker-pypy:
+    <<: *common
     build:
       context: python/falcon
       dockerfile: Dockerfile.pypy
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
-    ports:
-      - "8000:8000"
+
   laravel:
+    <<: *common
     build:
       context: php/laravel
       args:
         - POSTGRES_HOST=${POSTGRES_HOST}
-    ports:
-      - "8000:8000"
+
   laravel-octane-franken:
+    <<: *common
     build:
       context: php/laravel
       dockerfile: Dockerfile.octane-frankenphp
       args:
         - POSTGRES_HOST=${POSTGRES_HOST}
-    ports:
-      - "8000:8000"
 
 networks:
   default:
