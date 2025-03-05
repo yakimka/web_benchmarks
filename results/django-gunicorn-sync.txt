@@ -1,6 +1,6 @@
 start_time: 2025-03-04T21:53:27
 path: /plaintext
-framework: django-sync-worker
+framework: django-gunicorn-sync
 latency_min: 1187
 latency_max: 56781
 latency_mean: 2406.0164632885
@@ -19,7 +19,7 @@ end_time: 2025-03-04T22:03:27
 
 start_time: 2025-03-04T22:03:38
 path: /api?query=somequerystringfromclient
-framework: django-sync-worker
+framework: django-gunicorn-sync
 latency_min: 1171
 latency_max: 45222
 latency_mean: 8570.2248087078
@@ -38,7 +38,7 @@ end_time: 2025-03-04T22:13:38
 
 start_time: 2025-03-04T22:13:48
 path: /db
-framework: django-sync-worker
+framework: django-gunicorn-sync
 latency_min: 222484
 latency_max: 642311
 latency_mean: 428722.50084083

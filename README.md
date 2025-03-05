@@ -6,6 +6,15 @@ Just a simple benchmark to compare the overhead of some web frameworks.
 Not representative of real world usage,
 don't take it too seriously and always do your own benchmarks.
 
+
+## Contents
+
+- [Methodology](#methodology)
+- [Results](#results)
+  - [Plaintext](#plaintext)
+  - [API](#api)
+  - [Database](#database)
+
 ## Methodology
 
 For benchmarking I used laptop with Intel Core i5-7300hq and 24GB RAM for running
@@ -55,40 +64,42 @@ Connections number is 64. While running wrk CPU usage was never at 100%, so wrk 
 
 Participants:
 
-- [go-stdlib](https://github.com/golang/go): Go stdlib http server, [pgx-v5](https://github.com/jackc/pgx) postgresql driver.
-- [uvicorn](https://www.uvicorn.org): ASGI server, uses
+- [go-pgx](https://github.com/golang/go): Go stdlib http server, [pgx-v5](https://github.com/jackc/pgx) postgresql driver.
+- [uvicorn-asyncpg](https://www.uvicorn.org): ASGI server, uses
     [uvloop](https://github.com/MagicStack/uvloop) and
     [httptools](https://github.com/MagicStack/httptools) for parsing requests,
     [orjson](https://github.com/ijl/orjson) for json serialization and
     [asyncpg](https://github.com/MagicStack/asyncpg) postgresql driver.
-- uvicorn-one-worker: same as uvicorn, but with only one worker.
-- uvicorn-h11: same as uvicorn, but uses [h11](https://github.com/python-hyper/h11) for http.
-- uvicorn-asyncio: same as uvicorn, but uses stdlib asyncio loop.
-- uvicorn-stdlib: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
-- uvicorn-stdlib-one-worker: same as uvicorn-stdlib, but with only one worker.
-- uvicorn-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
+- uvicorn-asyncpg-one-worker: same as uvicorn, but with only one worker.
+- uvicorn-asyncpg-h11: same as uvicorn, but uses [h11](https://github.com/python-hyper/h11) for http.
+- uvicorn-asyncpg-asyncio: same as uvicorn, but uses stdlib asyncio loop.
+- uvicorn-asyncpg-std: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
+- uvicorn-asyncpg-std-one-worker: same as uvicorn-asyncpg-std, but with only one worker.
+- uvicorn-psycopg-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
 - granian-asgi: [granian](https://github.com/emmett-framework/granian) + asyncpg + orjson + uvloop
 - granian-rsgi: same as granian-asgi but with [RSGI](https://github.com/emmett-framework/granian/blob/master/docs/spec/RSGI.md) server
 - [fastapi](https://github.com/fastapi/fastapi): fastapi + orjson + asyncpg, every view has async fastapi dependency.
 - fastapi-sync-endpoints: same as fastapi, but with sync views, db endpoint is not included in tests.
 - fastapi-sync-dependency: same as fastapi, but every endpoint has sync fastapi dependency.
-- django-sync-worker: [django](https://github.com/django/django) + [gunicorn](https://github.com/benoitc/gunicorn) with sync worker
-- django-gthread-worker: same as django-sync-worker, but with gthread worker
-- django-gevent-worker: same as django-sync-worker, but with gevent worker
-- django-asgi: django + uvicorn. Using async views.
+- django-gunicorn-sync: [django](https://github.com/django/django) + [gunicorn](https://github.com/benoitc/gunicorn) with sync worker
+- django-gunicorn-gthread: same as django-gunicorn-sync, but with gthread worker
+- django-gunicorn-gevent: same as django-gunicorn-sync, but with gevent worker
+- django-uvicorn: ASGI django + uvicorn. Using async views.
 - [robyn](https://github.com/sparckles/Robyn): robyn + asyncpg
-- socketify-async: [socketify.py](https://github.com/cirospaciari/socketify.py) + asyncpg + orjson. Async views.
-- socketify-sync: socketify.py + psycopg + orjson. Sync views.
-- socketify-async-pypy: socketify.py + psycopg + PyPy. Async views.
-- socketify-sync-pypy: socketify.py + psycopg + PyPy. Sync views.
-- falcon-wsgi-sync-worker: [falcon](https://github.com/falconry/falcon) + psycopg + orjson + gunicorn with sync worker. WSGI server.
-- falcon-wsgi-gthread-worker: same as falcon-wsgi-sync-worker, but with gthread worker.
-- falcon-wsgi-gevent-worker: same as falcon-wsgi-sync-worker, but with gevent worker.
-- falcon-wsgi-sync-worker-pypy: falcon + psycopg + PyPy + gunicorn with sync worker. WSGI server.
-- falcon-wsgi-gthread-worker-pypy: same as falcon-wsgi-sync-worker-pypy, but with gthread worker.
-- falcon-wsgi-gevent-worker-pypy: same as falcon-wsgi-sync-worker-pypy, but with gevent worker.
+- socketify-asyncpg-async: [socketify.py](https://github.com/cirospaciari/socketify.py) + asyncpg + orjson. Async views.
+- socketify-psycopg-sync: socketify.py + psycopg + orjson. Sync views.
+- socketify-psycopg-async-pypy: socketify.py + psycopg + PyPy. Async views.
+- socketify-psycopg-sync-pypy: socketify.py + psycopg + PyPy. Sync views.
+- falcon-gunicorn-sync: [falcon](https://github.com/falconry/falcon) + psycopg + orjson + gunicorn with sync worker. WSGI server.
+- falcon-gunicorn-gthread: same as falcon-gunicorn-sync, but with gthread worker.
+- falcon-gunicorn-gevent: same as falcon-gunicorn-sync, but with gevent worker.
+- falcon-gunicorn-sync-pypy: falcon + psycopg + PyPy + gunicorn with sync worker. WSGI server.
+- falcon-gunicorn-gthread-pypy: same as falcon-gunicorn-sync-pypy, but with gthread worker.
+- falcon-gunicorn-gevent-pypy: same as falcon-gunicorn-sync-pypy, but with gevent worker.
 - [laravel](https://github.com/laravel/laravel): standard laravel installation, nginx + php-fpm (all in one container).
-- laravel-octane-franken: laravel [octane](https://laravel.com/docs/12.x/octane) with [frankenphp](https://github.com/dunglas/frankenphp)
+- laravel-octane-frankenphp: laravel [octane](https://laravel.com/docs/12.x/octane) with [frankenphp](https://github.com/dunglas/frankenphp)
+
+**NOTE:**: names marked with an (e) in the charts indicate that the test encountered errors during execution.
 
 ### Plaintext
 
@@ -106,6 +117,7 @@ not representative of real world usage, just a simple overhead comparison.
 </details>
 
 ![results/images/plaintext_memory_median_mb.png](results/images/plaintext_memory_median_mb.png)
+![results/images/plaintext_memory_median_per_process_mb.png](results/images/plaintext_memory_median_per_process_mb.png)
 
 <details>
     <summary>Memory max</summary>
@@ -151,6 +163,7 @@ framework validation and json serialization.
 </details>
 
 ![results/images/api_memory_median_mb.png](results/images/api_memory_median_mb.png)
+![results/images/api_memory_median_per_process_mb.png](results/images/api_memory_median_per_process_mb.png)
 
 <details>
     <summary>Memory max</summary>
@@ -198,6 +211,7 @@ All data retrieved from database instantiated as some structure
 </details>
 
 ![results/images/db_memory_median_mb.png](results/images/db_memory_median_mb.png)
+![results/images/db_memory_median_per_process_mb.png](results/images/db_memory_median_per_process_mb.png)
 
 <details>
     <summary>Memory max</summary>

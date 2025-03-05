@@ -4,10 +4,10 @@ COPY requirements.txt /app/
 
 RUN pip install -r /app/requirements.txt
 
-COPY server_asgi.py /app/server_asgi.py
+COPY server_asgi.py run_asgi.sh /app/
 
 
 EXPOSE 8000
 WORKDIR /app
 
-CMD ["granian", "--interface=asgi", "--workers=4", "--host=0.0.0.0", "--port=8000", "--loop=uvloop", "--log-level=info", "--no-access-log", "server_asgi:app"]
+CMD ["./run_asgi.sh"]

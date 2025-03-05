@@ -1,6 +1,6 @@
 start_time: 2025-03-04T21:11:12
 path: /plaintext
-framework: laravel-octane-franken
+framework: laravel-octane-frankenphp
 latency_min: 2207
 latency_max: 231840
 latency_mean: 27301.670359904
@@ -19,7 +19,7 @@ end_time: 2025-03-04T21:21:12
 
 start_time: 2025-03-04T21:21:22
 path: /api?query=somequerystringfromclient
-framework: laravel-octane-franken
+framework: laravel-octane-frankenphp
 latency_min: 2972
 latency_max: 187413
 latency_mean: 29288.640749396
@@ -38,7 +38,7 @@ end_time: 2025-03-04T21:31:22
 
 start_time: 2025-03-04T21:31:32
 path: /db
-framework: laravel-octane-franken
+framework: laravel-octane-frankenphp
 latency_min: 7143
 latency_max: 124242
 latency_mean: 55688.043206018

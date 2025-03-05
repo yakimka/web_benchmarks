@@ -12,12 +12,14 @@ x-common: &common
     - "8000:8000"
 
 services:
-  go-stdlib:
+  go-pgx:
     <<: *common
     build:
       context: go/stdlib
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
 
-  uvicorn:
+  uvicorn-asyncpg:
     <<: *common
     build:
       context: python/uvicorn
@@ -28,7 +30,7 @@ services:
       - HTTP=httptools
       - JSON_LIBRARY=orjson
 
-  uvicorn-h11:
+  uvicorn-asyncpg-h11:
     <<: *common
     build:
       context: python/uvicorn
@@ -39,7 +41,7 @@ services:
       - HTTP=h11
       - JSON_LIBRARY=orjson
 
-  uvicorn-one-worker:
+  uvicorn-asyncpg-one-worker:
     <<: *common
     build:
       context: python/uvicorn
@@ -50,7 +52,7 @@ services:
       - HTTP=httptools
       - JSON_LIBRARY=orjson
 
-  uvicorn-asyncio:
+  uvicorn-asyncpg-asyncio:
     <<: *common
     build:
       context: python/uvicorn
@@ -61,7 +63,7 @@ services:
       - HTTP=httptools
       - JSON_LIBRARY=orjson
 
-  uvicorn-stdlib:
+  uvicorn-asyncpg-std:
     <<: *common
     build:
       context: python/uvicorn
@@ -72,7 +74,7 @@ services:
       - HTTP=h11
       - JSON_LIBRARY=stdlib
 
-  uvicorn-stdlib-one-worker:
+  uvicorn-asyncpg-std-one-worker:
     <<: *common
     build:
       context: python/uvicorn
@@ -83,7 +85,7 @@ services:
       - HTTP=h11
       - JSON_LIBRARY=stdlib
 
-  uvicorn-pypy:
+  uvicorn-psycopg-pypy:
     <<: *common
     build:
       context: python/uvicorn
@@ -99,6 +101,7 @@ services:
       dockerfile: Dockerfile.asgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
   granian-rsgi:
     <<: *common
@@ -107,6 +110,8 @@ services:
       dockerfile: Dockerfile.rsgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      # workers=cpu_count() * 0.75 - leave 25% cpu to the Rust runtime
+      - WEB_CONCURRENCY=3
 
   fastapi:
     <<: *common
@@ -114,6 +119,7 @@ services:
       context: python/fastapi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
   fastapi-sync-endpoints:
     <<: *common
@@ -122,6 +128,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
+      - WEB_CONCURRENCY=4
 
   fastapi-sync-dependency:
     <<: *common
@@ -130,39 +137,44 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_DEPENDENCY=1
+      - WEB_CONCURRENCY=4
 
-  django-sync-worker:
+  django-gunicorn-sync:
     <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
-  django-gthread-worker:
+  django-gunicorn-gthread:
     <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      - THREADS=4
+      - WEB_CONCURRENCY=4
 
-  django-gevent-worker:
+  django-gunicorn-gevent:
     <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
-  django-asgi:
+  django-uvicorn:
     <<: *common
     build:
       context: python/django
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - ASYNC_MODE=1
+      - WEB_CONCURRENCY=4
 
   robyn:
     <<: *common
@@ -170,8 +182,9 @@ services:
       context: python/robyn
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
-  socketify-async:
+  socketify-asyncpg-async:
     <<: *common
     build:
       context: python/socketify
@@ -179,8 +192,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=asyncpg
+      - WEB_CONCURRENCY=4
 
-  socketify-sync:
+  socketify-psycopg-sync:
     <<: *common
     build:
       context: python/socketify
@@ -190,8 +204,9 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
+      - WEB_CONCURRENCY=4
 
-  socketify-async-pypy:
+  socketify-psycopg-async-pypy:
     <<: *common
     build:
       context: python/socketify
@@ -200,8 +215,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=psycopg_async
+      - WEB_CONCURRENCY=4
 
-  socketify-sync-pypy:
+  socketify-psycopg-sync-pypy:
     <<: *common
     build:
       context: python/socketify
@@ -211,33 +227,37 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
+      - WEB_CONCURRENCY=4
 
-  falcon-wsgi-sync-worker:
+  falcon-gunicorn-sync:
     <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
-  falcon-wsgi-gthread-worker:
+  falcon-gunicorn-gthread:
     <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      - WEB_CONCURRENCY=4
+      - THREADS=4
 
-  falcon-wsgi-gevent-worker:
+  falcon-gunicorn-gevent:
     <<: *common
     build:
       context: python/falcon
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
-  falcon-wsgi-sync-worker-pypy:
+  falcon-gunicorn-sync-pypy:
     <<: *common
     build:
       context: python/falcon
@@ -245,8 +265,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
-  falcon-wsgi-gthread-worker-pypy:
+  falcon-gunicorn-gthread-pypy:
     <<: *common
     build:
       context: python/falcon
@@ -254,9 +275,11 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      # cpu_count() * 1.5
+      - WEB_CONCURRENCY=6
+      - THREADS=4
 
-  falcon-wsgi-gevent-worker-pypy:
+  falcon-gunicorn-gevent-pypy:
     <<: *common
     build:
       context: python/falcon
@@ -264,6 +287,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
   laravel:
     <<: *common
@@ -272,7 +296,7 @@ services:
       args:
         - POSTGRES_HOST=${POSTGRES_HOST}
 
-  laravel-octane-franken:
+  laravel-octane-frankenphp:
     <<: *common
     build:
       context: php/laravel

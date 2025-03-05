@@ -1,6 +1,6 @@
 start_time: 2025-03-03T20:05:27
 path: /plaintext
-framework: socketify-async
+framework: socketify-asyncpg-async
 latency_min: 411
 latency_max: 109105
 latency_mean: 1685.5986669162
@@ -19,7 +19,7 @@ end_time: 2025-03-03T20:15:27
 
 start_time: 2025-03-03T20:42:25
 path: /api?query=somequerystringfromclient
-framework: socketify-async
+framework: socketify-asyncpg-async
 latency_min: 508
 latency_max: 160295
 latency_mean: 2107.2778199776
@@ -38,7 +38,7 @@ end_time: 2025-03-03T20:52:25
 
 start_time: 2025-03-03T20:52:35
 path: /db
-framework: socketify-async
+framework: socketify-asyncpg-async
 latency_min: 2798
 latency_max: 304611
 latency_mean: 17065.573900799

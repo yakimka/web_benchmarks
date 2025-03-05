@@ -1,6 +1,6 @@
 start_time: 2025-02-24T12:18:51
 path: /plaintext
-framework: uvicorn-pypy
+framework: uvicorn-psycopg-pypy
 latency_min: 1613
 latency_max: 212859
 latency_mean: 4155.8227863301
@@ -19,7 +19,7 @@ end_time: 2025-02-24T12:28:52
 
 start_time: 2025-02-24T12:29:02
 path: /api?query=somequerystringfromclient
-framework: uvicorn-pypy
+framework: uvicorn-psycopg-pypy
 latency_min: 1462
 latency_max: 212143
 latency_mean: 4320.0360960532
@@ -38,7 +38,7 @@ end_time: 2025-02-24T12:39:02
 
 start_time: 2025-02-24T12:39:12
 path: /db
-framework: uvicorn-pypy
+framework: uvicorn-psycopg-pypy
 latency_min: 16734
 latency_max: 202779
 latency_mean: 59583.205592214

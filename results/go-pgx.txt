@@ -1,6 +1,6 @@
 start_time: 2025-03-04T16:41:54
 path: /plaintext
-framework: go-stdlib
+framework: go-pgx
 latency_min: 336
 latency_max: 144151
 latency_mean: 1273.7211783746
@@ -19,7 +19,7 @@ end_time: 2025-03-04T16:51:54
 
 start_time: 2025-03-04T16:52:05
 path: /api?query=somequerystringfromclient
-framework: go-stdlib
+framework: go-pgx
 latency_min: 352
 latency_max: 105524
 latency_mean: 1225.6241876561
@@ -38,7 +38,7 @@ end_time: 2025-03-04T17:02:05
 
 start_time: 2025-03-04T17:05:31
 path: /db
-framework: go-stdlib
+framework: go-pgx
 latency_min: 1203
 latency_max: 117238
 latency_mean: 8931.5998623705

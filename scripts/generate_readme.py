@@ -15,6 +15,40 @@ jinja_env = Environment(
     loader=PackageLoader("generate_readme", ".."), autoescape=select_autoescape()
 )
 
+# TODO: parse docker-compose.yml to get the value of WEB_CONCURRENCY
+FRAMEWORKS_PROCESSES = {
+    "go-pgx": 1,
+    "uvicorn-asyncpg": 4,
+    "uvicorn-asyncpg-one-worker": 1,
+    "uvicorn-asyncpg-h11": 4,
+    "uvicorn-asyncpg-asyncio": 4,
+    "uvicorn-asyncpg-std": 4,
+    "uvicorn-asyncpg-std-one-worker": 1,
+    "uvicorn-psycopg-pypy": 4,
+    "granian-asgi": 4,
+    "granian-rsgi": 3,
+    "fastapi": 4,
+    "fastapi-sync-endpoints": 4,
+    "fastapi-sync-dependency": 4,
+    "django-gunicorn-sync": 4,
+    "django-gunicorn-gthread": 4,
+    "django-gunicorn-gevent": 4,
+    "django-uvicorn": 4,
+    "robyn": 4,
+    "socketify-asyncpg-async": 5,
+    "socketify-psycopg-sync": 5,
+    "socketify-psycopg-async-pypy": 5,
+    "socketify-psycopg-sync-pypy": 5,
+    "falcon-gunicorn-sync": 4,
+    "falcon-gunicorn-gthread": 4,
+    "falcon-gunicorn-gevent": 4,
+    "falcon-gunicorn-sync-pypy": 4,
+    "falcon-gunicorn-gthread-pypy": 6,
+    "falcon-gunicorn-gevent-pypy": 4,
+    "laravel": 1,
+    "laravel-octane-frankenphp": 1,
+}
+
 
 @dataclass
 class ServerStats:
@@ -47,6 +81,10 @@ class BenchmarkResults:
     def rps(self) -> int:
         return int(self.requests_num / self.duration_sec)
 
+    def format_name(self) -> str:
+        has_errors = " (e)" if self.errors_num else ""
+        return f"{self.framework}{has_errors}"
+
 
 def generate_images(
     benchmarks: dict[str, list[BenchmarkResults]],
@@ -56,7 +94,7 @@ def generate_images(
 
     images_by_test_name = defaultdict(dict)
     for test_name, benchmark_results in benchmarks.items():
-        names = [result.framework for result in benchmark_results]
+        names = [result.format_name() for result in benchmark_results]
         filename_template = f"results/images/{test_name}_{{}}.png"
 
         rps = [result.rps for result in benchmark_results]
@@ -66,7 +104,7 @@ def generate_images(
             rps,
             "Requests per second",
             rps_image,
-            x_label="RPS (higher is better)",
+            x_label="RPS, higher is better",
         )
         images_by_test_name[test_name]["rps"] = rps_image
 
@@ -151,6 +189,25 @@ def generate_images(
             reverse=False,
         )
         images_by_test_name[test_name]["memory_median_mb"] = memory_median_mb_image
+
+        memory_median_per_process_mb = [
+            round(result.memory_median_mb / FRAMEWORKS_PROCESSES[result.framework], 2)
+            for result in benchmark_results
+        ]
+        memory_median_per_process_mb_image = filename_template.format(
+            "memory_median_per_process_mb"
+        )
+        create_chart(
+            names,
+            memory_median_per_process_mb,
+            "Median memory usage per process",
+            memory_median_per_process_mb_image,
+            x_label="mb, lower is better",
+            reverse=False,
+        )
+        images_by_test_name[test_name][
+            "memory_median_per_process_mb"
+        ] = memory_median_per_process_mb_image
 
         memory_max_mb = [result.memory_max_mb for result in benchmark_results]
         memory_max_mb_image = filename_template.format("memory_max_mb")

@@ -3,6 +3,6 @@
 python -m robyn \
   server.py \
   --fast \
-  --processes=4 \
+  --processes=${WEB_CONCURRENCY:-1} \
   --workers=2 \
   --log-level=WARN
