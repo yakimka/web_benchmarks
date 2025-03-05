@@ -16,6 +16,8 @@ services:
     <<: *common
     build:
       context: go/stdlib
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
 
   uvicorn-asyncpg:
     <<: *common
