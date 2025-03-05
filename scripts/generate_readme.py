@@ -15,6 +15,7 @@ jinja_env = Environment(
     loader=PackageLoader("generate_readme", ".."), autoescape=select_autoescape()
 )
 
+# TODO: parse docker-compose.yml to get the value of WEB_CONCURRENCY
 FRAMEWORKS_PROCESSES = {
     "go-pgx": 1,
     "uvicorn-asyncpg": 4,
@@ -25,7 +26,7 @@ FRAMEWORKS_PROCESSES = {
     "uvicorn-asyncpg-std-one-worker": 1,
     "uvicorn-psycopg-pypy": 4,
     "granian-asgi": 4,
-    "granian-rsgi": 4,
+    "granian-rsgi": 3,
     "fastapi": 4,
     "fastapi-sync-endpoints": 4,
     "fastapi-sync-dependency": 4,
@@ -42,7 +43,7 @@ FRAMEWORKS_PROCESSES = {
     "falcon-gunicorn-gthread": 4,
     "falcon-gunicorn-gevent": 4,
     "falcon-gunicorn-sync-pypy": 4,
-    "falcon-gunicorn-gthread-pypy": 4,
+    "falcon-gunicorn-gthread-pypy": 6,
     "falcon-gunicorn-gevent-pypy": 4,
     "laravel": 1,
     "laravel-octane-frankenphp": 1,

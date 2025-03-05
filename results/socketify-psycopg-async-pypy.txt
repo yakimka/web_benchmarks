@@ -14,7 +14,7 @@ errors_status: 0
 errors_connect: 0
 errors_read: 0
 errors_write: 0
-errors_timeout: 1
+errors_timeout: 0
 end_time: 2025-03-03T21:58:27
 
 start_time: 2025-03-03T21:58:37
