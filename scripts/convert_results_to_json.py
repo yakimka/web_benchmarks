@@ -91,6 +91,8 @@ def _parse_memory(text: str) -> float:
         return float(text[:-3]) / 1024
     elif text.endswith("MiB"):
         return float(text[:-3])
+    elif text.endswith("GiB"):
+        return float(text[:-3]) * 1024
     elif text == "0B":
         return 0
     else:
