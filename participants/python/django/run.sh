@@ -4,6 +4,7 @@ if [ "${ASYNC_MODE}" == "1" ]; then
   uvicorn server.asgi:application \
       --host=0.0.0.0 \
       --port=8000 \
+      --workers=4 \
       --loop=uvloop \
       --http=httptools \
       --log-level=info \

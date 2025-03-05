@@ -1,6 +1,6 @@
 start_time: 2025-03-03T22:24:35
 path: /plaintext
-framework: socketify-sync-pypy
+framework: socketify-psycopg-sync-pypy
 latency_min: 295
 latency_max: 310260
 latency_mean: 2566.1607207445
@@ -19,7 +19,7 @@ end_time: 2025-03-03T22:34:35
 
 start_time: 2025-03-03T22:34:45
 path: /api?query=somequerystringfromclient
-framework: socketify-sync-pypy
+framework: socketify-psycopg-sync-pypy
 latency_min: 354
 latency_max: 374059
 latency_mean: 2865.0933867586
@@ -38,7 +38,7 @@ end_time: 2025-03-03T22:44:45
 
 start_time: 2025-03-03T22:44:56
 path: /db
-framework: socketify-sync-pypy
+framework: socketify-psycopg-sync-pypy
 latency_min: 6446
 latency_max: 255615
 latency_mean: 54243.987133325

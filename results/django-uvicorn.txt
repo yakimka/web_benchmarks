@@ -1,6 +1,6 @@
 start_time: 2025-03-04T23:44:11
 path: /plaintext
-framework: django-asgi
+framework: django-uvicorn
 latency_min: 3652
 latency_max: 111387
 latency_mean: 32866.997060166
@@ -19,7 +19,7 @@ end_time: 2025-03-04T23:54:11
 
 start_time: 2025-03-04T23:54:21
 path: /api?query=somequerystringfromclient
-framework: django-asgi
+framework: django-uvicorn
 latency_min: 5674
 latency_max: 228185
 latency_mean: 33475.677548639
@@ -38,7 +38,7 @@ end_time: 2025-03-05T00:04:21
 
 start_time: 2025-03-05T00:04:31
 path: /db
-framework: django-asgi
+framework: django-uvicorn
 latency_min: 236293
 latency_max: 659168
 latency_mean: 430066.92754386

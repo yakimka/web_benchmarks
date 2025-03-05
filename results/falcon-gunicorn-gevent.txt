@@ -1,6 +1,6 @@
 start_time: 2025-03-03T23:55:16
 path: /plaintext
-framework: falcon-wsgi-gevent-worker
+framework: falcon-gunicorn-gevent
 latency_min: 731
 latency_max: 245425
 latency_mean: 5226.0170406978
@@ -19,7 +19,7 @@ end_time: 2025-03-04T00:05:16
 
 start_time: 2025-03-04T00:05:27
 path: /api?query=somequerystringfromclient
-framework: falcon-wsgi-gevent-worker
+framework: falcon-gunicorn-gevent
 latency_min: 769
 latency_max: 243928
 latency_mean: 5794.0788278578
@@ -38,7 +38,7 @@ end_time: 2025-03-04T00:15:27
 
 start_time: 2025-03-04T00:15:37
 path: /db
-framework: falcon-wsgi-gevent-worker
+framework: falcon-gunicorn-gevent
 latency_min: 2765
 latency_max: 207419
 latency_mean: 28067.288618017

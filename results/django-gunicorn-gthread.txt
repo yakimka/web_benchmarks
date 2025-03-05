@@ -1,6 +1,6 @@
 start_time: 2025-03-04T22:34:21
 path: /plaintext
-framework: django-gthread-worker
+framework: django-gunicorn-gthread
 latency_min: 995
 latency_max: 222265
 latency_mean: 12027.384602654
@@ -19,7 +19,7 @@ end_time: 2025-03-04T22:44:21
 
 start_time: 2025-03-04T22:44:31
 path: /api?query=somequerystringfromclient
-framework: django-gthread-worker
+framework: django-gunicorn-gthread
 latency_min: 991
 latency_max: 195156
 latency_mean: 13322.364015325
@@ -38,7 +38,7 @@ end_time: 2025-03-04T22:54:31
 
 start_time: 2025-03-04T22:54:41
 path: /db
-framework: django-gthread-worker
+framework: django-gunicorn-gthread
 latency_min: 167491
 latency_max: 814470
 latency_mean: 429186.40805215

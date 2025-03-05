@@ -1,6 +1,6 @@
 start_time: 2025-03-04T17:49:38
 path: /plaintext
-framework: falcon-wsgi-sync-worker
+framework: falcon-gunicorn-sync
 latency_min: 661
 latency_max: 41040
 latency_mean: 2139.6287809933
@@ -19,7 +19,7 @@ end_time: 2025-03-04T17:59:38
 
 start_time: 2025-03-04T17:59:49
 path: /api?query=somequerystringfromclient
-framework: falcon-wsgi-sync-worker
+framework: falcon-gunicorn-sync
 latency_min: 1012
 latency_max: 32386
 latency_mean: 2333.6608449534
@@ -38,7 +38,7 @@ end_time: 2025-03-04T18:09:49
 
 start_time: 2025-03-04T18:09:59
 path: /db
-framework: falcon-wsgi-sync-worker
+framework: falcon-gunicorn-sync
 latency_min: 2991
 latency_max: 260323
 latency_mean: 25841.113705496

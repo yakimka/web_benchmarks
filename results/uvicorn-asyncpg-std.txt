@@ -1,6 +1,6 @@
 start_time: 2025-02-24T10:48:09
 path: /plaintext
-framework: uvicorn-stdlib
+framework: uvicorn-asyncpg-std
 latency_min: 1996
 latency_max: 214941
 latency_mean: 6322.0232306906
@@ -19,7 +19,7 @@ end_time: 2025-02-24T10:58:09
 
 start_time: 2025-02-24T10:58:19
 path: /api?query=somequerystringfromclient
-framework: uvicorn-stdlib
+framework: uvicorn-asyncpg-std
 latency_min: 2083
 latency_max: 212497
 latency_mean: 5878.5974718996
@@ -38,7 +38,7 @@ end_time: 2025-02-24T11:08:19
 
 start_time: 2025-02-24T11:08:29
 path: /db
-framework: uvicorn-stdlib
+framework: uvicorn-asyncpg-std
 latency_min: 4842
 latency_max: 320511
 latency_mean: 25199.902069317

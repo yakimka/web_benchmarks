@@ -1,6 +1,6 @@
 start_time: 2025-03-04T23:07:20
 path: /plaintext
-framework: django-gevent-worker
+framework: django-gunicorn-gevent
 latency_min: 976
 latency_max: 153765
 latency_mean: 12026.094859975
@@ -19,7 +19,7 @@ end_time: 2025-03-04T23:17:20
 
 start_time: 2025-03-04T23:17:30
 path: /api?query=somequerystringfromclient
-framework: django-gevent-worker
+framework: django-gunicorn-gevent
 latency_min: 1009
 latency_max: 148877
 latency_mean: 13750.435586229
@@ -38,7 +38,7 @@ end_time: 2025-03-04T23:27:30
 
 start_time: 2025-03-04T23:27:40
 path: /db
-framework: django-gevent-worker
+framework: django-gunicorn-gevent
 latency_min: 188934
 latency_max: 617120
 latency_mean: 430456.6720567

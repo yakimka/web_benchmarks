@@ -3,7 +3,7 @@
         {
             "start_time": "2025-02-23T17:35:15",
             "path": "plaintext",
-            "framework": "uvicorn-h11",
+            "framework": "uvicorn-asyncpg-h11",
             "latency_min": 742.0,
             "latency_max": 117042.0,
             "latency_mean": 4360.934921114,
@@ -23,7 +23,7 @@
         {
             "start_time": "2025-02-23T17:45:25",
             "path": "api",
-            "framework": "uvicorn-h11",
+            "framework": "uvicorn-asyncpg-h11",
             "latency_min": 715.0,
             "latency_max": 117987.0,
             "latency_mean": 4755.6070446169,
@@ -43,7 +43,7 @@
         {
             "start_time": "2025-02-23T17:55:36",
             "path": "db",
-            "framework": "uvicorn-h11",
+            "framework": "uvicorn-asyncpg-h11",
             "latency_min": 2894.0,
             "latency_max": 430891.0,
             "latency_mean": 18632.889995456,
@@ -63,7 +63,7 @@
         {
             "start_time": "2025-03-03T22:24:35",
             "path": "plaintext",
-            "framework": "socketify-sync-pypy",
+            "framework": "socketify-psycopg-sync-pypy",
             "latency_min": 295.0,
             "latency_max": 310260.0,
             "latency_mean": 2566.1607207445,
@@ -83,7 +83,7 @@
         {
             "start_time": "2025-03-03T22:34:45",
             "path": "api",
-            "framework": "socketify-sync-pypy",
+            "framework": "socketify-psycopg-sync-pypy",
             "latency_min": 354.0,
             "latency_max": 374059.0,
             "latency_mean": 2865.0933867586,
@@ -103,7 +103,7 @@
         {
             "start_time": "2025-03-03T22:44:56",
             "path": "db",
-            "framework": "socketify-sync-pypy",
+            "framework": "socketify-psycopg-sync-pypy",
             "latency_min": 6446.0,
             "latency_max": 255615.0,
             "latency_mean": 54243.987133325,
@@ -183,7 +183,7 @@
         {
             "start_time": "2025-02-23T18:40:00",
             "path": "plaintext",
-            "framework": "uvicorn",
+            "framework": "uvicorn-asyncpg",
             "latency_min": 535.0,
             "latency_max": 210235.0,
             "latency_mean": 2126.0089411861,
@@ -203,7 +203,7 @@
         {
             "start_time": "2025-02-23T18:50:10",
             "path": "api",
-            "framework": "uvicorn",
+            "framework": "uvicorn-asyncpg",
             "latency_min": 570.0,
             "latency_max": 109103.0,
             "latency_mean": 2319.1501325355,
@@ -223,7 +223,7 @@
         {
             "start_time": "2025-02-23T19:00:21",
             "path": "db",
-            "framework": "uvicorn",
+            "framework": "uvicorn-asyncpg",
             "latency_min": 2988.0,
             "latency_max": 256752.0,
             "latency_mean": 15642.440722868,
@@ -243,7 +243,7 @@
         {
             "start_time": "2025-03-04T23:44:11",
             "path": "plaintext",
-            "framework": "django-asgi",
+            "framework": "django-uvicorn",
             "latency_min": 3652.0,
             "latency_max": 111387.0,
             "latency_mean": 32866.997060166,
@@ -263,7 +263,7 @@
         {
             "start_time": "2025-03-04T23:54:21",
             "path": "api",
-            "framework": "django-asgi",
+            "framework": "django-uvicorn",
             "latency_min": 5674.0,
             "latency_max": 228185.0,
             "latency_mean": 33475.677548639,
@@ -283,7 +283,7 @@
         {
             "start_time": "2025-03-05T00:04:31",
             "path": "db",
-            "framework": "django-asgi",
+            "framework": "django-uvicorn",
             "latency_min": 236293.0,
             "latency_max": 659168.0,
             "latency_mean": 430066.92754386,
@@ -343,7 +343,7 @@
         {
             "start_time": "2025-03-03T20:05:27",
             "path": "plaintext",
-            "framework": "socketify-async",
+            "framework": "socketify-asyncpg-async",
             "latency_min": 411.0,
             "latency_max": 109105.0,
             "latency_mean": 1685.5986669162,
@@ -363,7 +363,7 @@
         {
             "start_time": "2025-03-03T20:42:25",
             "path": "api",
-            "framework": "socketify-async",
+            "framework": "socketify-asyncpg-async",
             "latency_min": 508.0,
             "latency_max": 160295.0,
             "latency_mean": 2107.2778199776,
@@ -383,7 +383,7 @@
         {
             "start_time": "2025-03-03T20:52:35",
             "path": "db",
-            "framework": "socketify-async",
+            "framework": "socketify-asyncpg-async",
             "latency_min": 2798.0,
             "latency_max": 304611.0,
             "latency_mean": 17065.573900799,
@@ -403,7 +403,7 @@
         {
             "start_time": "2025-03-04T21:11:12",
             "path": "plaintext",
-            "framework": "laravel-octane-franken",
+            "framework": "laravel-octane-frankenphp",
             "latency_min": 2207.0,
             "latency_max": 231840.0,
             "latency_mean": 27301.670359904,
@@ -423,7 +423,7 @@
         {
             "start_time": "2025-03-04T21:21:22",
             "path": "api",
-            "framework": "laravel-octane-franken",
+            "framework": "laravel-octane-frankenphp",
             "latency_min": 2972.0,
             "latency_max": 187413.0,
             "latency_mean": 29288.640749396,
@@ -443,7 +443,7 @@
         {
             "start_time": "2025-03-04T21:31:32",
             "path": "db",
-            "framework": "laravel-octane-franken",
+            "framework": "laravel-octane-frankenphp",
             "latency_min": 7143.0,
             "latency_max": 124242.0,
             "latency_mean": 55688.043206018,
@@ -463,7 +463,7 @@
         {
             "start_time": "2025-02-24T10:48:09",
             "path": "plaintext",
-            "framework": "uvicorn-stdlib",
+            "framework": "uvicorn-asyncpg-std",
             "latency_min": 1996.0,
             "latency_max": 214941.0,
             "latency_mean": 6322.0232306906,
@@ -483,7 +483,7 @@
         {
             "start_time": "2025-02-24T10:58:19",
             "path": "api",
-            "framework": "uvicorn-stdlib",
+            "framework": "uvicorn-asyncpg-std",
             "latency_min": 2083.0,
             "latency_max": 212497.0,
             "latency_mean": 5878.5974718996,
@@ -503,7 +503,7 @@
         {
             "start_time": "2025-02-24T11:08:29",
             "path": "db",
-            "framework": "uvicorn-stdlib",
+            "framework": "uvicorn-asyncpg-std",
             "latency_min": 4842.0,
             "latency_max": 320511.0,
             "latency_mean": 25199.902069317,
@@ -523,7 +523,7 @@
         {
             "start_time": "2025-02-23T19:17:45",
             "path": "plaintext",
-            "framework": "uvicorn-one-worker",
+            "framework": "uvicorn-asyncpg-one-worker",
             "latency_min": 769.0,
             "latency_max": 113834.0,
             "latency_mean": 3658.9155481139,
@@ -543,7 +543,7 @@
         {
             "start_time": "2025-02-23T19:27:55",
             "path": "api",
-            "framework": "uvicorn-one-worker",
+            "framework": "uvicorn-asyncpg-one-worker",
             "latency_min": 697.0,
             "latency_max": 116809.0,
             "latency_mean": 4430.0824242692,
@@ -563,7 +563,7 @@
         {
             "start_time": "2025-02-23T19:38:06",
             "path": "db",
-            "framework": "uvicorn-one-worker",
+            "framework": "uvicorn-asyncpg-one-worker",
             "latency_min": 6974.0,
             "latency_max": 1957446.0,
             "latency_mean": 92416.380882573,
@@ -583,7 +583,7 @@
         {
             "start_time": "2025-03-03T21:10:05",
             "path": "plaintext",
-            "framework": "socketify-sync",
+            "framework": "socketify-psycopg-sync",
             "latency_min": 323.0,
             "latency_max": 122215.0,
             "latency_mean": 1527.8506061338,
@@ -603,7 +603,7 @@
         {
             "start_time": "2025-03-03T21:20:16",
             "path": "api",
-            "framework": "socketify-sync",
+            "framework": "socketify-psycopg-sync",
             "latency_min": 468.0,
             "latency_max": 111109.0,
             "latency_mean": 2000.656714976,
@@ -623,7 +623,7 @@
         {
             "start_time": "2025-03-03T21:30:26",
             "path": "db",
-            "framework": "socketify-sync",
+            "framework": "socketify-psycopg-sync",
             "latency_min": 3063.0,
             "latency_max": 127212.0,
             "latency_mean": 28419.281973894,
@@ -643,7 +643,7 @@
         {
             "start_time": "2025-03-04T23:07:20",
             "path": "plaintext",
-            "framework": "django-gevent-worker",
+            "framework": "django-gunicorn-gevent",
             "latency_min": 976.0,
             "latency_max": 153765.0,
             "latency_mean": 12026.094859975,
@@ -663,7 +663,7 @@
         {
             "start_time": "2025-03-04T23:17:30",
             "path": "api",
-            "framework": "django-gevent-worker",
+            "framework": "django-gunicorn-gevent",
             "latency_min": 1009.0,
             "latency_max": 148877.0,
             "latency_mean": 13750.435586229,
@@ -683,7 +683,7 @@
         {
             "start_time": "2025-03-04T23:27:40",
             "path": "db",
-            "framework": "django-gevent-worker",
+            "framework": "django-gunicorn-gevent",
             "latency_min": 188934.0,
             "latency_max": 617120.0,
             "latency_mean": 430456.6720567,
@@ -703,7 +703,7 @@
         {
             "start_time": "2025-03-03T23:55:16",
             "path": "plaintext",
-            "framework": "falcon-wsgi-gevent-worker",
+            "framework": "falcon-gunicorn-gevent",
             "latency_min": 731.0,
             "latency_max": 245425.0,
             "latency_mean": 5226.0170406978,
@@ -723,7 +723,7 @@
         {
             "start_time": "2025-03-04T00:05:27",
             "path": "api",
-            "framework": "falcon-wsgi-gevent-worker",
+            "framework": "falcon-gunicorn-gevent",
             "latency_min": 769.0,
             "latency_max": 243928.0,
             "latency_mean": 5794.0788278578,
@@ -743,7 +743,7 @@
         {
             "start_time": "2025-03-04T00:15:37",
             "path": "db",
-            "framework": "falcon-wsgi-gevent-worker",
+            "framework": "falcon-gunicorn-gevent",
             "latency_min": 2765.0,
             "latency_max": 207419.0,
             "latency_mean": 28067.288618017,
@@ -763,7 +763,7 @@
         {
             "start_time": "2025-03-04T22:34:21",
             "path": "plaintext",
-            "framework": "django-gthread-worker",
+            "framework": "django-gunicorn-gthread",
             "latency_min": 995.0,
             "latency_max": 222265.0,
             "latency_mean": 12027.384602654,
@@ -783,7 +783,7 @@
         {
             "start_time": "2025-03-04T22:44:31",
             "path": "api",
-            "framework": "django-gthread-worker",
+            "framework": "django-gunicorn-gthread",
             "latency_min": 991.0,
             "latency_max": 195156.0,
             "latency_mean": 13322.364015325,
@@ -803,7 +803,7 @@
         {
             "start_time": "2025-03-04T22:54:41",
             "path": "db",
-            "framework": "django-gthread-worker",
+            "framework": "django-gunicorn-gthread",
             "latency_min": 167491.0,
             "latency_max": 814470.0,
             "latency_mean": 429186.40805215,
@@ -823,7 +823,7 @@
         {
             "start_time": "2025-03-04T16:41:54",
             "path": "plaintext",
-            "framework": "go-stdlib",
+            "framework": "go-pgx",
             "latency_min": 336.0,
             "latency_max": 144151.0,
             "latency_mean": 1273.7211783746,
@@ -843,7 +843,7 @@
         {
             "start_time": "2025-03-04T16:52:05",
             "path": "api",
-            "framework": "go-stdlib",
+            "framework": "go-pgx",
             "latency_min": 352.0,
             "latency_max": 105524.0,
             "latency_mean": 1225.6241876561,
@@ -863,7 +863,7 @@
         {
             "start_time": "2025-03-04T17:05:31",
             "path": "db",
-            "framework": "go-stdlib",
+            "framework": "go-pgx",
             "latency_min": 1203.0,
             "latency_max": 117238.0,
             "latency_mean": 8931.5998623705,
@@ -943,7 +943,7 @@
         {
             "start_time": "2025-02-24T10:15:43",
             "path": "plaintext",
-            "framework": "uvicorn-asyncio",
+            "framework": "uvicorn-asyncpg-asyncio",
             "latency_min": 1359.0,
             "latency_max": 212317.0,
             "latency_mean": 2733.1946225891,
@@ -963,7 +963,7 @@
         {
             "start_time": "2025-02-24T10:25:53",
             "path": "api",
-            "framework": "uvicorn-asyncio",
+            "framework": "uvicorn-asyncpg-asyncio",
             "latency_min": 1430.0,
             "latency_max": 212338.0,
             "latency_mean": 3299.5229032056,
@@ -983,7 +983,7 @@
         {
             "start_time": "2025-02-24T10:36:03",
             "path": "db",
-            "framework": "uvicorn-asyncio",
+            "framework": "uvicorn-asyncpg-asyncio",
             "latency_min": 4308.0,
             "latency_max": 436135.0,
             "latency_mean": 17824.559789287,
@@ -1003,7 +1003,7 @@
         {
             "start_time": "2025-03-04T17:49:38",
             "path": "plaintext",
-            "framework": "falcon-wsgi-sync-worker",
+            "framework": "falcon-gunicorn-sync",
             "latency_min": 661.0,
             "latency_max": 41040.0,
             "latency_mean": 2139.6287809933,
@@ -1023,7 +1023,7 @@
         {
             "start_time": "2025-03-04T17:59:49",
             "path": "api",
-            "framework": "falcon-wsgi-sync-worker",
+            "framework": "falcon-gunicorn-sync",
             "latency_min": 1012.0,
             "latency_max": 32386.0,
             "latency_mean": 2333.6608449534,
@@ -1043,7 +1043,7 @@
         {
             "start_time": "2025-03-04T18:09:59",
             "path": "db",
-            "framework": "falcon-wsgi-sync-worker",
+            "framework": "falcon-gunicorn-sync",
             "latency_min": 2991.0,
             "latency_max": 260323.0,
             "latency_mean": 25841.113705496,
@@ -1063,7 +1063,7 @@
         {
             "start_time": "2025-03-04T18:39:09",
             "path": "plaintext",
-            "framework": "falcon-wsgi-sync-worker-pypy",
+            "framework": "falcon-gunicorn-sync-pypy",
             "latency_min": 668.0,
             "latency_max": 13462.0,
             "latency_mean": 2317.630413895,
@@ -1083,7 +1083,7 @@
         {
             "start_time": "2025-03-04T18:49:20",
             "path": "api",
-            "framework": "falcon-wsgi-sync-worker-pypy",
+            "framework": "falcon-gunicorn-sync-pypy",
             "latency_min": 5333.0,
             "latency_max": 5333.0,
             "latency_mean": 5333.0,
@@ -1103,7 +1103,7 @@
         {
             "start_time": "2025-03-04T18:59:30",
             "path": "db",
-            "framework": "falcon-wsgi-sync-worker-pypy",
+            "framework": "falcon-gunicorn-sync-pypy",
             "latency_min": 7593.0,
             "latency_max": 163418.0,
             "latency_mean": 52590.822531212,
@@ -1123,7 +1123,7 @@
         {
             "start_time": "2025-03-04T21:53:27",
             "path": "plaintext",
-            "framework": "django-sync-worker",
+            "framework": "django-gunicorn-sync",
             "latency_min": 1187.0,
             "latency_max": 56781.0,
             "latency_mean": 2406.0164632885,
@@ -1143,7 +1143,7 @@
         {
             "start_time": "2025-03-04T22:03:38",
             "path": "api",
-            "framework": "django-sync-worker",
+            "framework": "django-gunicorn-sync",
             "latency_min": 1171.0,
             "latency_max": 45222.0,
             "latency_mean": 8570.2248087078,
@@ -1163,7 +1163,7 @@
         {
             "start_time": "2025-03-04T22:13:48",
             "path": "db",
-            "framework": "django-sync-worker",
+            "framework": "django-gunicorn-sync",
             "latency_min": 222484.0,
             "latency_max": 642311.0,
             "latency_mean": 428722.50084083,
@@ -1243,7 +1243,7 @@
         {
             "start_time": "2025-02-24T11:40:17",
             "path": "plaintext",
-            "framework": "uvicorn-stdlib-one-worker",
+            "framework": "uvicorn-asyncpg-std-one-worker",
             "latency_min": 2657.0,
             "latency_max": 31922.0,
             "latency_mean": 18287.618426649,
@@ -1263,7 +1263,7 @@
         {
             "start_time": "2025-02-24T11:50:27",
             "path": "api",
-            "framework": "uvicorn-stdlib-one-worker",
+            "framework": "uvicorn-asyncpg-std-one-worker",
             "latency_min": 5294.0,
             "latency_max": 32129.0,
             "latency_mean": 20726.323734385,
@@ -1283,7 +1283,7 @@
         {
             "start_time": "2025-02-24T12:00:38",
             "path": "db",
-            "framework": "uvicorn-stdlib-one-worker",
+            "framework": "uvicorn-asyncpg-std-one-worker",
             "latency_min": 10667.0,
             "latency_max": 744265.0,
             "latency_mean": 86904.781503559,
@@ -1363,7 +1363,7 @@
         {
             "start_time": "2025-03-04T19:15:04",
             "path": "plaintext",
-            "framework": "falcon-wsgi-gthread-worker-pypy",
+            "framework": "falcon-gunicorn-gthread-pypy",
             "latency_min": 668.0,
             "latency_max": 329260.0,
             "latency_mean": 4110.5218632834,
@@ -1383,7 +1383,7 @@
         {
             "start_time": "2025-03-04T19:25:14",
             "path": "api",
-            "framework": "falcon-wsgi-gthread-worker-pypy",
+            "framework": "falcon-gunicorn-gthread-pypy",
             "latency_min": 725.0,
             "latency_max": 252105.0,
             "latency_mean": 5067.6560930274,
@@ -1403,7 +1403,7 @@
         {
             "start_time": "2025-03-04T19:35:25",
             "path": "db",
-            "framework": "falcon-wsgi-gthread-worker-pypy",
+            "framework": "falcon-gunicorn-gthread-pypy",
             "latency_min": 4340.0,
             "latency_max": 1356628.0,
             "latency_mean": 59984.452510835,
@@ -1483,7 +1483,7 @@
         {
             "start_time": "2025-03-03T21:48:26",
             "path": "plaintext",
-            "framework": "socketify-async-pypy",
+            "framework": "socketify-psycopg-async-pypy",
             "latency_min": 324.0,
             "latency_max": 188206.0,
             "latency_mean": 2799.8956412579,
@@ -1497,13 +1497,13 @@
             "errors_connect": 0.0,
             "errors_read": 0.0,
             "errors_write": 0.0,
-            "errors_timeout": 1.0,
+            "errors_timeout": 0.0,
             "end_time": "2025-03-03T21:58:27"
         },
         {
             "start_time": "2025-03-03T21:58:37",
             "path": "api",
-            "framework": "socketify-async-pypy",
+            "framework": "socketify-psycopg-async-pypy",
             "latency_min": 411.0,
             "latency_max": 212068.0,
             "latency_mean": 3457.9162850755,
@@ -1523,7 +1523,7 @@
         {
             "start_time": "2025-03-03T22:08:47",
             "path": "db",
-            "framework": "socketify-async-pypy",
+            "framework": "socketify-psycopg-async-pypy",
             "latency_min": 5917.0,
             "latency_max": 290619.0,
             "latency_mean": 52546.827513754,
@@ -1543,7 +1543,7 @@
         {
             "start_time": "2025-03-04T19:51:07",
             "path": "plaintext",
-            "framework": "falcon-wsgi-gevent-worker-pypy",
+            "framework": "falcon-gunicorn-gevent-pypy",
             "latency_min": 446.0,
             "latency_max": 259840.0,
             "latency_mean": 3161.4965353839,
@@ -1563,7 +1563,7 @@
         {
             "start_time": "2025-03-04T20:01:17",
             "path": "api",
-            "framework": "falcon-wsgi-gevent-worker-pypy",
+            "framework": "falcon-gunicorn-gevent-pypy",
             "latency_min": 580.0,
             "latency_max": 247237.0,
             "latency_mean": 3488.2156353411,
@@ -1583,7 +1583,7 @@
         {
             "start_time": "2025-03-04T20:11:27",
             "path": "db",
-            "framework": "falcon-wsgi-gevent-worker-pypy",
+            "framework": "falcon-gunicorn-gevent-pypy",
             "latency_min": 6447.0,
             "latency_max": 784292.0,
             "latency_mean": 67397.501320416,
@@ -1663,7 +1663,7 @@
         {
             "start_time": "2025-03-03T23:11:44",
             "path": "plaintext",
-            "framework": "falcon-wsgi-gthread-worker",
+            "framework": "falcon-gunicorn-gthread",
             "latency_min": 841.0,
             "latency_max": 257060.0,
             "latency_mean": 5680.3613906852,
@@ -1683,7 +1683,7 @@
         {
             "start_time": "2025-03-03T23:21:54",
             "path": "api",
-            "framework": "falcon-wsgi-gthread-worker",
+            "framework": "falcon-gunicorn-gthread",
             "latency_min": 894.0,
             "latency_max": 252546.0,
             "latency_mean": 6066.3943583234,
@@ -1703,7 +1703,7 @@
         {
             "start_time": "2025-03-03T23:32:04",
             "path": "db",
-            "framework": "falcon-wsgi-gthread-worker",
+            "framework": "falcon-gunicorn-gthread",
             "latency_min": 2726.0,
             "latency_max": 237096.0,
             "latency_mean": 24220.11995777,
@@ -1723,7 +1723,7 @@
         {
             "start_time": "2025-02-24T12:18:51",
             "path": "plaintext",
-            "framework": "uvicorn-pypy",
+            "framework": "uvicorn-psycopg-pypy",
             "latency_min": 1613.0,
             "latency_max": 212859.0,
             "latency_mean": 4155.8227863301,
@@ -1743,7 +1743,7 @@
         {
             "start_time": "2025-02-24T12:29:02",
             "path": "api",
-            "framework": "uvicorn-pypy",
+            "framework": "uvicorn-psycopg-pypy",
             "latency_min": 1462.0,
             "latency_max": 212143.0,
             "latency_mean": 4320.0360960532,
@@ -1763,7 +1763,7 @@
         {
             "start_time": "2025-02-24T12:39:12",
             "path": "db",
-            "framework": "uvicorn-pypy",
+            "framework": "uvicorn-psycopg-pypy",
             "latency_min": 16734.0,
             "latency_max": 202779.0,
             "latency_mean": 59583.205592214,

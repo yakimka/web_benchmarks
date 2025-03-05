@@ -1,6 +1,6 @@
 start_time: 2025-03-04T19:15:04
 path: /plaintext
-framework: falcon-wsgi-gthread-worker-pypy
+framework: falcon-gunicorn-gthread-pypy
 latency_min: 668
 latency_max: 329260
 latency_mean: 4110.5218632834
@@ -19,7 +19,7 @@ end_time: 2025-03-04T19:25:04
 
 start_time: 2025-03-04T19:25:14
 path: /api?query=somequerystringfromclient
-framework: falcon-wsgi-gthread-worker-pypy
+framework: falcon-gunicorn-gthread-pypy
 latency_min: 725
 latency_max: 252105
 latency_mean: 5067.6560930274
@@ -38,7 +38,7 @@ end_time: 2025-03-04T19:35:14
 
 start_time: 2025-03-04T19:35:25
 path: /db
-framework: falcon-wsgi-gthread-worker-pypy
+framework: falcon-gunicorn-gthread-pypy
 latency_min: 4340
 latency_max: 1356628
 latency_mean: 59984.452510835
