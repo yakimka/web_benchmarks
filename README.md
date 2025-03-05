@@ -67,6 +67,28 @@ Participants:
 - uvicorn-stdlib: uvicorn with stdlib asyncio loop, h11 and stdlib json serialization.
 - uvicorn-stdlib-one-worker: same as uvicorn-stdlib, but with only one worker.
 - uvicorn-pypy: uvicorn with [PyPy](https://pypy.org), h11 and pure Python [psycopg](https://github.com/psycopg/psycopg).
+- granian-asgi: [granian](https://github.com/emmett-framework/granian) + asyncpg + orjson + uvloop
+- granian-rsgi: same as granian-asgi but with [RSGI](https://github.com/emmett-framework/granian/blob/master/docs/spec/RSGI.md) server
+- [fastapi](https://github.com/fastapi/fastapi): fastapi + orjson + asyncpg, every view has async fastapi dependency.
+- fastapi-sync-endpoints: same as fastapi, but with sync views, db endpoint is not included in tests.
+- fastapi-sync-dependency: same as fastapi, but every endpoint has sync fastapi dependency.
+- django-sync-worker: [django](https://github.com/django/django) + [gunicorn](https://github.com/benoitc/gunicorn) with sync worker
+- django-gthread-worker: same as django-sync-worker, but with gthread worker
+- django-gevent-worker: same as django-sync-worker, but with gevent worker
+- django-asgi: django + uvicorn. Using async views.
+- [robyn](https://github.com/sparckles/Robyn): robyn + asyncpg
+- socketify-async: [socketify.py](https://github.com/cirospaciari/socketify.py) + asyncpg + orjson. Async views.
+- socketify-sync: socketify.py + psycopg + orjson. Sync views.
+- socketify-async-pypy: socketify.py + psycopg + PyPy. Async views.
+- socketify-sync-pypy: socketify.py + psycopg + PyPy. Sync views.
+- falcon-wsgi-sync-worker: [falcon](https://github.com/falconry/falcon) + psycopg + orjson + gunicorn with sync worker. WSGI server.
+- falcon-wsgi-gthread-worker: same as falcon-wsgi-sync-worker, but with gthread worker.
+- falcon-wsgi-gevent-worker: same as falcon-wsgi-sync-worker, but with gevent worker.
+- falcon-wsgi-sync-worker-pypy: falcon + psycopg + PyPy + gunicorn with sync worker. WSGI server.
+- falcon-wsgi-gthread-worker-pypy: same as falcon-wsgi-sync-worker-pypy, but with gthread worker.
+- falcon-wsgi-gevent-worker-pypy: same as falcon-wsgi-sync-worker-pypy, but with gevent worker.
+- [laravel](https://github.com/laravel/laravel): standard laravel installation, nginx + php-fpm (all in one container).
+- laravel-octane-franken: laravel [octane](https://laravel.com/docs/12.x/octane) with [frankenphp](https://github.com/dunglas/frankenphp)
 
 ### Plaintext
 

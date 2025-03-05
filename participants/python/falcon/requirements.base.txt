@@ -1,0 +1,2 @@
+falcon==4.0.2
+psycopg-pool==3.2.4

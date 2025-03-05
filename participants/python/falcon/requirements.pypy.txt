@@ -1,0 +1,5 @@
+-r requirements.base.txt
+
+gunicorn==23.0.0
+gevent==24.11.1
+psycopg==3.2.4

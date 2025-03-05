@@ -12,11 +12,11 @@ async def measure(pool):
         start = time.monotonic()
         async with pool.acquire() as conn:
             await conn.fetch(
-                'SELECT * FROM users WHERE id = $1',
+                "SELECT * FROM users WHERE id = $1",
                 1,
             )
             await conn.fetch(
-                'SELECT * FROM devices LIMIT 10',
+                "SELECT * FROM devices LIMIT 10",
             )
         end = time.monotonic()
         if i >= 100:

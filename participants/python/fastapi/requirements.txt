@@ -1,0 +1,6 @@
+orjson==3.10.15
+uvloop==0.21.0
+httptools==0.6.4
+asyncpg==0.30.0
+uvicorn==0.34.0
+fastapi==0.115.8

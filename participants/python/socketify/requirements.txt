@@ -1,0 +1,4 @@
+-r requirements.base.txt
+
+asyncpg==0.30.0
+orjson==3.10.15

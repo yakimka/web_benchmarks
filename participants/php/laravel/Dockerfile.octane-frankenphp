@@ -1,0 +1,36 @@
+FROM dunglas/frankenphp:1.4.4-php8.4.4
+
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean \
+    && apt-get autoremove -y
+
+RUN install-php-extensions \
+	opcache \
+	pcntl \
+    pdo_pgsql \
+    pgsql \
+	zip
+
+COPY --link . /app/
+
+
+RUN mkdir -p bootstrap/cache \
+            storage/logs \
+            storage/framework/sessions \
+            storage/framework/views \
+            storage/framework/cache
+
+COPY --link deploy/conf/php.ini  /usr/local/etc/php/
+
+# replace DB_HOST=postgresql in .env with DB_HOST=VALUE_FROM_ARG
+ARG POSTGRES_HOST
+RUN sed -i "s/DB_HOST=postgresql/DB_HOST=$POSTGRES_HOST/g" .env
+
+RUN php artisan optimize
+
+RUN frankenphp -v
+
+EXPOSE 8080
+
+ENTRYPOINT ["php", "artisan", "octane:frankenphp", "--port=8000", "--caddyfile=/app/deploy/franken/Caddyfile"]
