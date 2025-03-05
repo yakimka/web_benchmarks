@@ -198,7 +198,7 @@ def create_chart(
 
     sns.set_style("darkgrid")
 
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(6, 10))
     barplot = sns.barplot(x=sorted_values, y=sorted_names, orient="h")
     barplot.bar_label(barplot.containers[0], padding=1)
     # barplot.set_xlim(auto=True)
