@@ -101,6 +101,7 @@ services:
       dockerfile: Dockerfile.asgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
   granian-rsgi:
     <<: *common
@@ -109,6 +110,8 @@ services:
       dockerfile: Dockerfile.rsgi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      # workers=cpu_count() * 0.75 - leave 25% cpu to the Rust runtime
+      - WEB_CONCURRENCY=3
 
   fastapi:
     <<: *common
@@ -116,6 +119,7 @@ services:
       context: python/fastapi
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
   fastapi-sync-endpoints:
     <<: *common
@@ -124,6 +128,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
+      - WEB_CONCURRENCY=4
 
   fastapi-sync-dependency:
     <<: *common
@@ -132,6 +137,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_DEPENDENCY=1
+      - WEB_CONCURRENCY=4
 
   django-gunicorn-sync:
     <<: *common
@@ -140,6 +146,7 @@ services:
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
   django-gunicorn-gthread:
     <<: *common
@@ -148,7 +155,8 @@ services:
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      - THREADS=4
+      - WEB_CONCURRENCY=4
 
   django-gunicorn-gevent:
     <<: *common
@@ -157,6 +165,7 @@ services:
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
   django-uvicorn:
     <<: *common
@@ -165,6 +174,7 @@ services:
     environment:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - ASYNC_MODE=1
+      - WEB_CONCURRENCY=4
 
   robyn:
     <<: *common
@@ -172,6 +182,7 @@ services:
       context: python/robyn
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - WEB_CONCURRENCY=4
 
   socketify-asyncpg-async:
     <<: *common
@@ -181,6 +192,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=asyncpg
+      - WEB_CONCURRENCY=4
 
   socketify-psycopg-sync:
     <<: *common
@@ -192,6 +204,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
+      - WEB_CONCURRENCY=4
 
   socketify-psycopg-async-pypy:
     <<: *common
@@ -202,6 +215,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - SQL_DRIVER=psycopg_async
+      - WEB_CONCURRENCY=4
 
   socketify-psycopg-sync-pypy:
     <<: *common
@@ -213,6 +227,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - SYNC_ENDPOINTS=1
       - SQL_DRIVER=psycopg_sync
+      - WEB_CONCURRENCY=4
 
   falcon-gunicorn-sync:
     <<: *common
@@ -221,6 +236,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
   falcon-gunicorn-gthread:
     <<: *common
@@ -229,7 +245,8 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      - WEB_CONCURRENCY=4
+      - THREADS=4
 
   falcon-gunicorn-gevent:
     <<: *common
@@ -238,6 +255,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
   falcon-gunicorn-sync-pypy:
     <<: *common
@@ -247,6 +265,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=sync
+      - WEB_CONCURRENCY=4
 
   falcon-gunicorn-gthread-pypy:
     <<: *common
@@ -256,7 +275,8 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gthread
-      - THREADS=10
+      - WEB_CONCURRENCY=4
+      - THREADS=4
 
   falcon-gunicorn-gevent-pypy:
     <<: *common
@@ -266,6 +286,7 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - WORKER_CLASS=gevent
+      - WEB_CONCURRENCY=4
 
   laravel:
     <<: *common

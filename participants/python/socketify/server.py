@@ -217,7 +217,7 @@ def create_fork():
     run_app()
 
 
-WORKER_COUNT = 4
+WORKER_COUNT = int(os.environ.get("WEB_CONCURRENCY", 1))
 
 
 for _ in range(WORKER_COUNT):

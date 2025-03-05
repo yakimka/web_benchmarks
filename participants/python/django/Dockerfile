@@ -11,7 +11,7 @@ RUN pip install -r /app/requirements.txt
 
 COPY . /app/
 
-ENV WEB_CONCURRENCY=4
+ENV WEB_CONCURRENCY=1
 
 EXPOSE 8000
 WORKDIR /app
