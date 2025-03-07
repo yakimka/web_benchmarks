@@ -359,7 +359,5 @@ if __name__ == "__main__":
     parser.add_argument(
         "--results_file", required=True, type=str, help="File with benchmark results"
     )
-    # parser.add_argument("--template_file", required=True, type=str)
-    # parser.add_argument("--output", required=True, type=str)
     args = parser.parse_args()
     main(args)

@@ -24,22 +24,22 @@ mkdir -p ./results
 
 echo "Running load testing for $name"
 
-#echo "Plaintext endpoint"
-#echo "Warming up for 10 seconds"
-#wrk -t 4 -c 40 -d 10 $host/plaintext > /dev/null 2>&1
-#echo "Running $(date)"
-#wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/plaintext
+echo "Plaintext endpoint"
+echo "Warming up for 10 seconds"
+wrk -t 4 -c 40 -d 10 $host/plaintext > /dev/null 2>&1
+echo "Start: $(date)"
+wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/plaintext
 
-#echo "API endpoint"
-#echo "Warming up for 10 seconds"
-#wrk -t 4 -c 40 -d 10 $host/api > /dev/null 2>&1
-#echo "Running $(date)"
-#wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua -H "X-Header: somevaluefromheader" "$host/api?query=somequerystringfromclient"
+echo "API endpoint"
+echo "Warming up for 10 seconds"
+wrk -t 4 -c 40 -d 10 $host/api > /dev/null 2>&1
+echo "Start: $(date)"
+wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua -H "X-Header: somevaluefromheader" "$host/api?query=somequerystringfromclient"
 
 echo "DB endpoint"
 echo "Warming up for 10 seconds"
 wrk -t 4 -c 40 -d 10 $host/db > /dev/null 2>&1
-echo "Running $(date)"
+echo "Start: $(date)"
 wrk -t $threads -c $connections -d $duration -s wrk/write_stats.lua $host/db
 
 echo "All done!"
