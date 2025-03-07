@@ -289,6 +289,14 @@ services:
       - WORKER_CLASS=gevent
       - WEB_CONCURRENCY=4
 
+  emmett:
+    <<: *common
+    build:
+      context: python/emmett
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - WEB_CONCURRENCY=4
+
   laravel:
     <<: *common
     build:
@@ -303,6 +311,13 @@ services:
       dockerfile: Dockerfile.octane-frankenphp
       args:
         - POSTGRES_HOST=${POSTGRES_HOST}
+
+  express:
+    <<: *common
+    build:
+      context: js/express
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
 
 networks:
   default:

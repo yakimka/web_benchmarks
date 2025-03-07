@@ -45,8 +45,10 @@ FRAMEWORKS_PROCESSES = {
     "falcon-gunicorn-sync-pypy": 4,
     "falcon-gunicorn-gthread-pypy": 6,
     "falcon-gunicorn-gevent-pypy": 4,
+    "emmett": 4,
     "laravel": 1,
     "laravel-octane-frankenphp": 1,
+    "express": 4,
 }
 
 

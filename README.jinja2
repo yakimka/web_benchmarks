@@ -96,10 +96,12 @@ Participants:
 - falcon-gunicorn-sync-pypy: falcon + psycopg + PyPy + gunicorn with sync worker. WSGI server.
 - falcon-gunicorn-gthread-pypy: same as falcon-gunicorn-sync-pypy, but with gthread worker.
 - falcon-gunicorn-gevent-pypy: same as falcon-gunicorn-sync-pypy, but with gevent worker.
+- [emmett](https://github.com/emmett-framework/emmett): standard emmett installation.
 - [laravel](https://github.com/laravel/laravel): standard laravel installation, nginx + php-fpm (all in one container).
 - laravel-octane-frankenphp: laravel [octane](https://laravel.com/docs/12.x/octane) with [frankenphp](https://github.com/dunglas/frankenphp)
+- [express](https://github.com/expressjs/express): express + [postgres.js](https://github.com/porsager/postgres)
 
-**NOTE:**: names marked with an (e) in the charts indicate that the test encountered errors during execution.
+**NOTE:** names marked with an (e) in the charts indicate that the test encountered errors during execution.
 
 ### Plaintext
 
