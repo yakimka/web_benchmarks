@@ -14,6 +14,7 @@ don't take it too seriously and always do your own benchmarks.
   - [Plaintext](#plaintext)
   - [API](#api)
   - [Database](#database)
+  - [Thoughts](#thoughts)
 
 ## Methodology
 
@@ -240,3 +241,18 @@ All data retrieved from database instantiated as some structure
 
 ![results/images/db_latency_99th.png](results/images/db_latency_99th.png)
 </details>
+
+
+## Thoughts
+
+- Python can perform well in simple tests, but even in basic "API test",
+    its throughput is noticeably lower than in the Plaintext test.
+- Socketify.py is a highly interesting and high-performance framework.
+- Granian delivers good results compared to Uvicorn while consuming less CPU than the latter.
+- Falcon is a solid framework with decent performance.
+- Robyn is not as fast as other frameworks, and its API is not particularly convenient.
+- Asyncpg is a very fast database driver, but performance depends on more than just the driver.
+- Using synchronous views and dependencies in FastAPI significantly reduces performance.
+- PyPy consumes much more memory than CPython and even more than Node.js.
+- Node.js demonstrates excellent performance.
+- Laravel is significantly slower than other frameworks, including Django.
